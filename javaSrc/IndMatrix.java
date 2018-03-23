@@ -12,19 +12,35 @@ import java.util.*;
 public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 {
 
+	private int rows;
+	private int cols;
+	T[][] incidenceMatrix;
+//	String command = null;
+	PrintWriter PW = new PrintWriter(System.out, true);
+	
+	
 	/**
 	 * Contructs empty graph.
 	 */
+	@SuppressWarnings("unchecked")
     public IndMatrix() {
     	// Implement me!
-    		int vertex;
-    		int edge;
-    		int[][] incidenceMatrix;
+    		incidenceMatrix = (T[][]) new Object[rows + 1][cols + 1];
     } // end of IndMatrix()
     
 	// add vertices
     public void addVertex(T vertLabel) {
         // Implement me!
+    		try {
+    			// get the vertex value
+    			// display
+    			PW.print(vertLabel);
+    		} catch (NullPointerException npe) {
+    			System.err.println("this shit is null");
+    		}
+    		
+    		
+    		
     } // end of addVertex()
 	
     
@@ -57,6 +73,11 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     // print current vertices
     public void printVertices(PrintWriter os) {
         // Implement me!
+    		try {
+    			
+    		} catch (NullPointerException npe) {
+    			System.err.println("null");
+    		}
     } // end of printVertices()
 	
     // print current edges connecting vertices
