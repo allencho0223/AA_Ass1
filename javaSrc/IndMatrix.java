@@ -64,7 +64,9 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
         // Implement me!
     } // end of printEdges()
     
-    
+    // displays the selected vertices and distance value
+    // e.g. S A E returns A E 3 like this
+    // if the 2 vertices are not connected, it returns -1
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
     	// Implement me!
     	
