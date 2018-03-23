@@ -11,21 +11,45 @@ import java.util.*;
  */
 public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 {
+	private T[][] adjMatrix;
+	private int rows = 5;
+	private int columns = 5;
+	private int count = 0;
+	
 
 	/**
 	 * Contructs empty graph.
 	 */
-    public AdjMatrix() {
+    @SuppressWarnings("unchecked")
+	public AdjMatrix() {
+
+    	adjMatrix = (T[][])new Object[rows+1][columns+1];
+      	
     	// Implement me!
     } // end of AdjMatrix()
     
     
     public void addVertex(T vertLabel) {
+    	
+    	adjMatrix[count][count] = vertLabel;
+    	count++;
         // Implement me!
     } // end of addVertex()
 	
     
     public void addEdge(T srcLabel, T tarLabel) {
+    	
+    	
+    	for (int i = 0; i < adjMatrix.length; i++) {
+    	    for (int j = 0; j < adjMatrix[i].length; j++) {
+    	    	if (adjMatrix[i][j] != null && adjMatrix[i][j].equals(srcLabel))
+    	    		System.out.println("equals srcLabel" + " " + adjMatrix[i][j]);
+    	    	
+    	    }
+    	 
+    	}
+    	 
+    	
         // Implement me!
     } // end of addEdge()
 	
@@ -48,13 +72,32 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         // Implement me!
     } // end of removeEdges()
 	
-    
     public void printVertices(PrintWriter os) {
+    	
+    	for (int i = 0; i < adjMatrix.length; i++) {
+    	    for (int j = 0; j < adjMatrix[i].length; j++) {
+    	    	if (adjMatrix[i][j] != null)
+    	        System.out.print(adjMatrix[i][j] + " ");
+    	    }
+    	  
+    	}
         // Implement me!
     } // end of printVertices()
 	
     
     public void printEdges(PrintWriter os) {
+    	
+    	for (int i = 0; i < adjMatrix.length; i++) {
+    	    for (int j = 0; j < adjMatrix[i].length; j++) {
+    	    	
+    	    	System.out.println("to complete");
+    	    	 
+    	    }
+    	  
+    	}
+    	
+    	
+    	
         // Implement me!
     } // end of printEdges()
     
