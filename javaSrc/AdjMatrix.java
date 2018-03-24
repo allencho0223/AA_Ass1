@@ -14,9 +14,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	private T[][] adjMatrix;
 	private int rows = 5;
 	private int columns = 5;
-	private int count = 0;
-	
-
+	private int count;
+	private boolean[][] edgeMatrix;
 	/**
 	 * Contructs empty graph.
 	 */
@@ -31,6 +30,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void addVertex(T vertLabel) {
     	
+    	//int vertexArray[] = new int[5];    	
     	adjMatrix[count][count] = vertLabel;
     	count++;
         // Implement me!
@@ -39,12 +39,20 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void addEdge(T srcLabel, T tarLabel) {
     	
-    	
+    	edgeMatrix = new boolean[10][10];
     	for (int i = 0; i < adjMatrix.length; i++) {
     	    for (int j = 0; j < adjMatrix[i].length; j++) {
-    	    	if (adjMatrix[i][j] != null && adjMatrix[i][j].equals(srcLabel))
-    	    		System.out.println("equals srcLabel" + " " + adjMatrix[i][j]);
-    	    	
+    	    	if (adjMatrix[i][j] != null && adjMatrix[i][j].equals(srcLabel)) {
+    	    		edgeMatrix[i][j] = true;
+    	    		edgeMatrix[j][i] = true;
+    	    	}
+    	    	    	    	
+    	    	if (adjMatrix[i][j] != null && adjMatrix[i][j].equals(tarLabel)) {
+        	    	edgeMatrix[i][j] = true;
+        	    	edgeMatrix[j][i] = true;
+        	    		
+    	    	}
+    	    		
     	    }
     	 
     	}
@@ -77,7 +85,9 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	for (int i = 0; i < adjMatrix.length; i++) {
     	    for (int j = 0; j < adjMatrix[i].length; j++) {
     	    	if (adjMatrix[i][j] != null)
-    	        System.out.print(adjMatrix[i][j] + " ");
+    	    		os.print(adjMatrix[i][j]);
+    	    		
+    	        //System.out.print(adjMatrix[i][j] + " ");
     	    }
     	  
     	}
@@ -89,10 +99,12 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	
     	for (int i = 0; i < adjMatrix.length; i++) {
     	    for (int j = 0; j < adjMatrix[i].length; j++) {
+    	    	if (edgeMatrix[i][j] == true) {
+        	    	System.out.print(" " + adjMatrix[i][j]);
     	    	
-    	    	System.out.println("to complete");
-    	    	 
-    	    }
+    	    	}
+    	    } 
+
     	  
     	}
     	
