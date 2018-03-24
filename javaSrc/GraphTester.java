@@ -237,6 +237,7 @@ public class GraphTester
 		    	String[] tokens;
 		    	String srcLabel, tarLabel;
 		    	
+		    	// Get input to operate the matrices
 		    	while ((line = reader.readLine()) != null) {
 		    		tokens = line.split(delimiter);
 		    		srcLabel = tokens[0];

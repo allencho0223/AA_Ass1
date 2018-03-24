@@ -11,12 +11,14 @@ import java.util.*;
  */
 public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 {
-
-	private int rows;
-	private int cols;
-	T[][] incidenceMatrix;
-//	String command = null;
-	PrintWriter PW = new PrintWriter(System.out, true);
+	// vertices
+	private int rows = 0;
+	// edges
+	private int cols = 0;
+	T[][] incMat;
+	PrintWriter PW; 
+	ArrayList<T> vertices = new ArrayList<T>();
+	
 	
 	
 	/**
@@ -25,21 +27,16 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 	@SuppressWarnings("unchecked")
     public IndMatrix() {
     	// Implement me!
-    		incidenceMatrix = (T[][]) new Object[rows + 1][cols + 1];
+    		incMat = (T[][]) new Object[rows + 1][cols + 1];
     } // end of IndMatrix()
     
 	// add vertices
     public void addVertex(T vertLabel) {
         // Implement me!
-    		try {
-    			// get the vertex value
-    			// display
-    			PW.print(vertLabel);
-    		} catch (NullPointerException npe) {
-    			System.err.println("this shit is null");
-    		}
-    		
-    		
+    		incMat[rows][cols] = vertLabel;
+    		System.out.println("whazizis: " + incMat[rows][cols]);
+    		rows++;
+    		T[][] incMat = (T[][]) new Object[rows][cols];
     		
     } // end of addVertex()
 	
@@ -49,12 +46,16 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     // this method is to add connect vertices
     public void addEdge(T srcLabel, T tarLabel) {
         // Implement me!
+    		try {
+    			
+    		} catch (NullPointerException npe) {
+    			System.err.println("this is null");
+    		}
     } // end of addEdge()
 	
 	// Display every vertex connected with source vertex
     public ArrayList<T> neighbours(T vertLabel) {
         ArrayList<T> neighbours = new ArrayList<T>();
-        
         // Implement me!
         
         return neighbours;
@@ -74,7 +75,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     public void printVertices(PrintWriter os) {
         // Implement me!
     		try {
-    			
+    			os.println();
     		} catch (NullPointerException npe) {
     			System.err.println("null");
     		}
