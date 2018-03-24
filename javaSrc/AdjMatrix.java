@@ -12,9 +12,10 @@ import java.util.*;
 public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 {
 	private T[][] adjMatrix;
-	private int rows = 5;
-	private int columns = 5;
-	private int count;
+//	private int rows = 5;
+//	private int columns = 5;
+	private int count = 2;
+	private int index = 0;
 	private boolean[][] edgeMatrix;
 	/**
 	 * Contructs empty graph.
@@ -22,7 +23,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     @SuppressWarnings("unchecked")
 	public AdjMatrix() {
 
-    	adjMatrix = (T[][])new Object[rows+1][columns+1];
+    	adjMatrix = (T[][])new Object[count][count];
       	
     	// Implement me!
     } // end of AdjMatrix()
@@ -30,10 +31,22 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     public void addVertex(T vertLabel) {
     	
-    	//int vertexArray[] = new int[5];    	
-    	adjMatrix[count][count] = vertLabel;
-    	count++;
-        // Implement me!
+    	int sizeOfMatrix = adjMatrix.length;   // assign length of matrix to sizeOfMatrix 
+    	adjMatrix[index][index] = vertLabel;	// adjMatrix index 0 0 = vertex label 
+    	index++;
+    	if(index > 0.5 * sizeOfMatrix) {		// if index 0 0 is more than half the sizeOfMatrix
+    		sizeOfMatrix++;					//sizeOfmatrix variable + 1
+    		
+    	 @SuppressWarnings("unchecked")
+		T[][] newAdjMatrix = (T[][]) new Object[sizeOfMatrix][sizeOfMatrix];
+         for (int i = 0; i < adjMatrix.length; i++) {
+             for (int j = 0; j < adjMatrix[i].length; j++) {
+                 newAdjMatrix[i][j] = adjMatrix[i][j];
+             }
+         }    	
+         adjMatrix = newAdjMatrix;
+    	 }  	    
+    	
     } // end of addVertex()
 	
     
@@ -44,12 +57,11 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	    for (int j = 0; j < adjMatrix[i].length; j++) {
     	    	if (adjMatrix[i][j] != null && adjMatrix[i][j].equals(srcLabel)) {
     	    		edgeMatrix[i][j] = true;
-    	    		edgeMatrix[j][i] = true;
-    	    	}
-    	    	    	    	
+    	    	//	edgeMatrix[j][i] = true;
+    	    	}  	    	
     	    	if (adjMatrix[i][j] != null && adjMatrix[i][j].equals(tarLabel)) {
         	    	edgeMatrix[i][j] = true;
-        	    	edgeMatrix[j][i] = true;
+        	    //	edgeMatrix[j][i] = true;
         	    		
     	    	}
     	    		
@@ -84,11 +96,12 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	
     	for (int i = 0; i < adjMatrix.length; i++) {
     	    for (int j = 0; j < adjMatrix[i].length; j++) {
-    	    	if (adjMatrix[i][j] != null)
-    	    		os.print(adjMatrix[i][j]);
+    	    	//if (adjMatrix[i][j] != null)
+    	    		//os.print(adjMatrix[i][j]);
     	    		
-    	        //System.out.print(adjMatrix[i][j] + " ");
-    	    }
+    	        System.out.print(adjMatrix[i][j] + " ");
+
+    	    }System.out.println("");
     	  
     	}
         // Implement me!
@@ -101,7 +114,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	    for (int j = 0; j < adjMatrix[i].length; j++) {
     	    	if (edgeMatrix[i][j] == true) {
         	    	System.out.print(" " + adjMatrix[i][j]);
-    	    	
+        	    	System.out.print(" " + adjMatrix[j][i]);
+
     	    	}
     	    } 
 
