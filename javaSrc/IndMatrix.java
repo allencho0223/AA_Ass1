@@ -12,32 +12,40 @@ import java.util.*;
 public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 {
 	// vertices
+	private int initRowValue = 1;
 	private int rows = 0;
 	// edges
+	private int initColValue = 1;
 	private int cols = 0;
+	
 	T[][] incMat;
 	PrintWriter PW; 
-	ArrayList<T> vertices = new ArrayList<T>();
-	
-	
-	
 	/**
 	 * Contructs empty graph.
 	 */
 	@SuppressWarnings("unchecked")
     public IndMatrix() {
     	// Implement me!
-    		incMat = (T[][]) new Object[rows + 1][cols + 1];
+    		incMat = (T[][]) new Object[initRowValue][initColValue];
     } // end of IndMatrix()
     
 	// add vertices
     public void addVertex(T vertLabel) {
         // Implement me!
-    		incMat[rows][cols] = vertLabel;
-    		System.out.println("whazizis: " + incMat[rows][cols]);
-    		rows++;
-    		T[][] incMat = (T[][]) new Object[rows][cols];
     		
+    		try {
+    			if (rows >= initRowValue) {
+    				@SuppressWarnings("unchecked")
+    				T[][] incMat = (T[][]) new Object[rows + 1][initColValue];
+    				incMat[rows][cols] = vertLabel;
+    				rows++;
+    			} else {
+    				incMat[rows][cols] = vertLabel;
+    				rows++;
+    			}
+    		} catch (ArrayIndexOutOfBoundsException e) {
+    			System.err.println("array out of bounds");
+    		}
     } // end of addVertex()
 	
     
@@ -56,6 +64,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 	// Display every vertex connected with source vertex
     public ArrayList<T> neighbours(T vertLabel) {
         ArrayList<T> neighbours = new ArrayList<T>();
+//        neighbours.contains(vertLabel);
         // Implement me!
         
         return neighbours;
