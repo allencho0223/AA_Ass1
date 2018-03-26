@@ -18,6 +18,8 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 	private int initColValue = 1;
 	private int cols = 0;
 	
+	private int minVertForEdge = 2;
+	
 	T[][] incMat;
 	PrintWriter PW; 
 	/**
@@ -34,13 +36,30 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
         // Implement me!
     		
     		try {
+    			// if row 1, creates T[2][1] array
+    			// check if new vertex char is already stored in current array
+    			
+    			
+    			// if row value is larger value than initRowValue(1)
     			if (rows >= initRowValue) {
     				@SuppressWarnings("unchecked")
     				T[][] incMat = (T[][]) new Object[rows + 1][initColValue];
-    				incMat[rows][cols] = vertLabel;
-    				rows++;
+    				for (int i = 0; i < rows + 1; i++) {
+    					for (int j = 0; j < initColValue; j++) {
+    						if (incMat[i][j].equals(vertLabel)) {
+    							System.out.println("The vertex already exists in the matrix");
+    						} else {
+    							incMat[rows][cols] = vertLabel;
+    							System.out.print(incMat[i][j] + ", ");
+	    		    				rows++;
+    						}
+    					}
+    				}
+    				System.out.println();
+    			// if row value is lower than initRowValue(1)
     			} else {
     				incMat[rows][cols] = vertLabel;
+    				System.out.println(vertLabel);
     				rows++;
     			}
     		} catch (ArrayIndexOutOfBoundsException e) {
@@ -55,7 +74,19 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     public void addEdge(T srcLabel, T tarLabel) {
         // Implement me!
     		try {
-    			
+    			// if there are at least 2 vertices, add edges
+    			if (rows >= minVertForEdge) {
+    				T srcVertInMat, tarVertInMat;
+    				for (int i = 0; i < rows; i++) {
+    					for (int j = 0; j < cols; j++) {
+//    						if (incMat[i][j] = )
+    					}
+    				}
+    				
+    			// otherwise, print "unable to connect"
+    			} else {
+    				System.out.println("At least 2 vertices are required");
+    			}
     		} catch (NullPointerException npe) {
     			System.err.println("this is null");
     		}
