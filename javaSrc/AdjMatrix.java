@@ -12,65 +12,68 @@ import java.util.*;
 public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 {
 	private T[][] adjMatrix;
-//	private int rows = 5;
-//	private int columns = 5;
-	private int count = 2;
-	private int index = 0;
-	private boolean[][] edgeMatrix;
-	/**
-	 * Contructs empty graph.
-	 */
+	List<T> vertexList = new ArrayList<T>();
+	int numV = 0;
+	int n = 0;
+	@SuppressWarnings("unchecked")
+	T edge = (T) "0";
+	private T[] newArray;
+	
+	
     @SuppressWarnings("unchecked")
 	public AdjMatrix() {
-
-    	adjMatrix = (T[][])new Object[count][count];
-      	
-    	// Implement me!
+    	adjMatrix = (T[][])new Object[0][0];
     } // end of AdjMatrix()
     
     
-    public void addVertex(T vertLabel) {
+    @SuppressWarnings("unchecked")
+	public void addVertex(T vertLabel) {
+    	int matrixLength = adjMatrix.length;
+    	for (T vertex: vertexList) 
+    	{
+    		if (vertex.equals(vertLabel)) {
+    		System.out.println("match");
+    		return;
+    		}
+    	}
     	
-    	int sizeOfMatrix = adjMatrix.length;   // assign length of matrix to sizeOfMatrix 
-    	adjMatrix[index][index] = vertLabel;	// adjMatrix index 0 0 = vertex label 
-    	index++;
-    	if(index > 0.5 * sizeOfMatrix) {		// if index 0 0 is more than half the sizeOfMatrix
-    		sizeOfMatrix++;					//sizeOfmatrix variable + 1
-    		
-    	 @SuppressWarnings("unchecked")
-		T[][] newAdjMatrix = (T[][]) new Object[sizeOfMatrix][sizeOfMatrix];
-         for (int i = 0; i < adjMatrix.length; i++) {
-             for (int j = 0; j < adjMatrix[i].length; j++) {
-                 newAdjMatrix[i][j] = adjMatrix[i][j];
-             }
-         }    	
-         adjMatrix = newAdjMatrix;
-    	 }  	    
+    	if (n == matrixLength) 
+    	{
+    		matrixLength++;
+    		T[][] newAdjMatrix = (T[][]) new Object[matrixLength][matrixLength];
+    	 	
+            for (int i = 0; i < adjMatrix.length; i++) {
+                for (int j = 0; j < adjMatrix[i].length; j++) {
+                    newAdjMatrix[i][j] = adjMatrix[i][j];
+                }
+            }
+            adjMatrix = newAdjMatrix;
+    	}
     	
+    	vertexList.add(vertLabel);
+    
+    	for (int col = numV; col >=0 ; col--) {
+    		newArray = (T[])new Object[3];
+    		newArray[0] = vertLabel;
+    		newArray[1] = vertexList.get(col);
+    		newArray[2] = edge;
+    		adjMatrix[numV][col] = (T) newArray; 
+    	}
+    	for (int row = numV; row >=0 ; row--) {
+    		newArray = (T[])new Object[3];
+    		newArray[0] = vertexList.get(row);
+    		newArray[1] = vertLabel;
+    		newArray[2] = edge;
+    		adjMatrix[row][numV] = (T) newArray; 
+    	}
+    	numV++; n++;
     } // end of addVertex()
 	
     
     public void addEdge(T srcLabel, T tarLabel) {
+        
     	
-    	edgeMatrix = new boolean[10][10];
-    	for (int i = 0; i < adjMatrix.length; i++) {
-    	    for (int j = 0; j < adjMatrix[i].length; j++) {
-    	    	if (adjMatrix[i][j] != null && adjMatrix[i][j].equals(srcLabel)) {
-    	    		edgeMatrix[i][j] = true;
-    	    	//	edgeMatrix[j][i] = true;
-    	    	}  	    	
-    	    	if (adjMatrix[i][j] != null && adjMatrix[i][j].equals(tarLabel)) {
-        	    	edgeMatrix[i][j] = true;
-        	    //	edgeMatrix[j][i] = true;
-        	    		
-    	    	}
-    	    		
-    	    }
-    	 
-    	}
-    	 
     	
-        // Implement me!
     } // end of addEdge()
 	
 
@@ -83,47 +86,61 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     } // end of neighbours()
     
     
-    public void removeVertex(T vertLabel) {
-        // Implement me!
+    @SuppressWarnings("unchecked")
+	public void removeVertex(T vertLabel) {
+    	int matrixLength = adjMatrix.length;
+    	vertexList.remove(vertLabel);
+    	
+    	matrixLength--;
+    	
+    	
+    	T found = null;
+    	T[] vArray = null;
+    	
+    	for (int i = 0; i < adjMatrix.length; i++) 
+    	{
+    		vArray = (T[]) adjMatrix[i][i];
+    		if (vArray[0].equals(vertLabel) && vArray[1].equals(vertLabel))
+    		{
+    			found = vArray[0];
+    			vertexList.remove(found);
+    			System.out.println("adjMatrix[i][i] = " + Arrays.deepToString((Object[]) adjMatrix[i][i]));
+    			break;
+    		}
+        }
+    	
+    //	adjMatrix = (T[][]) new Object[matrixLength][matrixLength];
+    	System.out.println("vertexList = " + vertexList);
+    	
+    	
+        
     } // end of removeVertex()
 	
     
     public void removeEdge(T srcLabel, T tarLabel) {
-        // Implement me!
+       
+    	
+    	
     } // end of removeEdges()
 	
+    
     public void printVertices(PrintWriter os) {
     	
     	for (int i = 0; i < adjMatrix.length; i++) {
     	    for (int j = 0; j < adjMatrix[i].length; j++) {
-    	    	//if (adjMatrix[i][j] != null)
-    	    		//os.print(adjMatrix[i][j]);
-    	    		
-    	        System.out.print(adjMatrix[i][j] + " ");
+    	    	System.out.print(Arrays.deepToString((Object[]) adjMatrix[i][j]));    	
 
-    	    }System.out.println("");
-    	  
+    	    }System.out.println(" ");
+    	
+    	   
+    	
+    	    //os.print(vertexList);
     	}
-        // Implement me!
+    
     } // end of printVertices()
 	
     
     public void printEdges(PrintWriter os) {
-    	
-    	for (int i = 0; i < adjMatrix.length; i++) {
-    	    for (int j = 0; j < adjMatrix[i].length; j++) {
-    	    	if (edgeMatrix[i][j] == true) {
-        	    	System.out.print(" " + adjMatrix[i][j]);
-        	    	System.out.print(" " + adjMatrix[j][i]);
-
-    	    	}
-    	    } 
-
-    	  
-    	}
-    	
-    	
-    	
         // Implement me!
     } // end of printEdges()
     
