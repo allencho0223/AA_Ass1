@@ -28,6 +28,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     @SuppressWarnings("unchecked")
 	public void addVertex(T vertLabel) {
+    	
     	int matrixLength = adjMatrix.length;
     	for (T vertex: vertexList) 
     	{
@@ -48,7 +49,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
                 }
             }
             adjMatrix = newAdjMatrix;
-    	}
+         
+    	}  
     	
     	vertexList.add(vertLabel);
     
@@ -66,12 +68,16 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     		newArray[2] = edge;
     		adjMatrix[row][numV] = (T) newArray; 
     	}
-    	numV++; n++;
+    	numV++; 
+    	n++;
+        System.out.println("after adding vertex n = " + n);
+
     } // end of addVertex()
 	
     
     public void addEdge(T srcLabel, T tarLabel) {
         
+    	
     	
     	
     } // end of addEdge()
@@ -89,31 +95,54 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     @SuppressWarnings("unchecked")
 	public void removeVertex(T vertLabel) {
     	int matrixLength = adjMatrix.length;
+    	int index = vertexList.indexOf(vertLabel);
     	vertexList.remove(vertLabel);
+    	T[] movedArray = (T[]) new Object[3];
+
+    	for (int row = 0; row < index; row++) 
+    	{
+    		for (int col = index; col < adjMatrix.length-1; col++) 
+    		{
+    			int nextCol = col+1;
+    			movedArray = (T[]) adjMatrix[row][nextCol];
+    			adjMatrix[row][col] = (T) movedArray;
+    			
+    		}
+    	}
+    	
+    	for (int row = index; row < adjMatrix.length -1; row++) 
+    	{
+    		for (int col = 0; col < index; col++) 
+    		{
+    		   	 int nextRow = row+1;
+    			 movedArray = (T[]) adjMatrix[nextRow][col];
+    			 adjMatrix[row][col] = (T) movedArray;
+    		}
+    	}
+    	
+    	for (int row = index; row < adjMatrix.length -1; row++) 
+    	{
+    		for (int col = index; col < adjMatrix.length -1; col++)
+    		{
+    			int nextRow = row+1;
+    			int nextCol = col+1;
+    			movedArray = (T[]) adjMatrix[nextRow][nextCol];
+    			adjMatrix[row][col] = (T) movedArray;
+    			
+    		}
+    	}
     	
     	matrixLength--;
-    	
-    	
-    	T found = null;
-    	T[] vArray = null;
-    	
-    	for (int i = 0; i < adjMatrix.length; i++) 
-    	{
-    		vArray = (T[]) adjMatrix[i][i];
-    		if (vArray[0].equals(vertLabel) && vArray[1].equals(vertLabel))
-    		{
-    			found = vArray[0];
-    			vertexList.remove(found);
-    			System.out.println("adjMatrix[i][i] = " + Arrays.deepToString((Object[]) adjMatrix[i][i]));
-    			break;
-    		}
+		T[][] newAdjMatrix = (T[][]) new Object[matrixLength][matrixLength];
+	 	
+        for (int i = 0; i < newAdjMatrix.length; i++) {
+            for (int j = 0; j < newAdjMatrix[i].length; j++) {
+                newAdjMatrix[i][j] = adjMatrix[i][j];
+            }
         }
-    	
-    //	adjMatrix = (T[][]) new Object[matrixLength][matrixLength];
-    	System.out.println("vertexList = " + vertexList);
-    	
-    	
-        
+        adjMatrix = newAdjMatrix;
+        n--; numV--;      
+    	        
     } // end of removeVertex()
 	
     
@@ -132,7 +161,6 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 
     	    }System.out.println(" ");
     	
-    	   
     	
     	    //os.print(vertexList);
     	}
