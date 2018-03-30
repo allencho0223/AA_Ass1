@@ -68,27 +68,57 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     		newArray[2] = edge;
     		adjMatrix[row][numV] = (T) newArray; 
     	}
-    	numV++; 
-    	n++;
-        System.out.println("after adding vertex n = " + n);
+    	numV++; n++;
+        
 
     } // end of addVertex()
 	
     
-    public void addEdge(T srcLabel, T tarLabel) {
-        
+    @SuppressWarnings("unchecked")
+	public void addEdge(T srcLabel, T tarLabel) {
+    	T[] edgeArray = (T[]) new Object[3];
+    	T newEdge = (T) new Object();
+    	newEdge = (T) "1";
+    	int sourceIndex;
+    	int targetIndex;
     	
+    	if (!(vertexList.contains(srcLabel)) || !(vertexList.contains(tarLabel)))
+    			{
+    				System.err.println("Error Message");
+    				return;
+    			}
+    	else
     	
+    		sourceIndex = vertexList.indexOf(srcLabel); // i.e. 2
+    		targetIndex = vertexList.indexOf(tarLabel); // i.e. 4
+    	
+    	edgeArray = (T[]) adjMatrix[sourceIndex][targetIndex];
+    	if (edgeArray[2] == edge)
+    	edgeArray[2] = newEdge;
+    	edgeArray = (T[]) adjMatrix[targetIndex][sourceIndex];
+    	if (edgeArray[2] == edge)
+    	edgeArray[2] = newEdge;
     	
     } // end of addEdge()
 	
 
-    public ArrayList<T> neighbours(T vertLabel) {
+    @SuppressWarnings("unchecked")
+	public ArrayList<T> neighbours(T vertLabel) {
         ArrayList<T> neighbours = new ArrayList<T>();
-        
-        // Implement me!
+        T edge = (T) "1";
+        int row = vertexList.indexOf(vertLabel);
+        T[] colArray;
+        int col = row;
+        while (col < adjMatrix.length) 
+        {
+        	colArray = (T[]) adjMatrix[row][col];
+        	if (colArray[2].equals(edge))
+        		neighbours.add(colArray[1]);
+        	col++;
+        }
         
         return neighbours;
+        
     } // end of neighbours()
     
     
@@ -147,7 +177,28 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	
     
     public void removeEdge(T srcLabel, T tarLabel) {
-       
+    	T[] edgeArray = (T[]) new Object[3];
+    	T newEdge = (T) new Object();
+    	newEdge = (T) "1";
+    	int sourceIndex;
+    	int targetIndex;
+    	
+    	if (!(vertexList.contains(srcLabel)) || !(vertexList.contains(tarLabel)))
+    			{
+    				System.err.println("Error Message");
+    				return;
+    			}
+    	else
+    	
+    		sourceIndex = vertexList.indexOf(srcLabel); // i.e. 2
+    		targetIndex = vertexList.indexOf(tarLabel); // i.e. 4
+    	
+    	edgeArray = (T[]) adjMatrix[sourceIndex][targetIndex];
+    	if (edgeArray[2].equals(newEdge))
+    	edgeArray[2] = edge;
+    	edgeArray = (T[]) adjMatrix[targetIndex][sourceIndex];
+    	if (edgeArray[2].equals(newEdge))
+    	edgeArray[2] = edge;
     	
     	
     } // end of removeEdges()
