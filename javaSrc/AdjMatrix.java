@@ -32,10 +32,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	int matrixLength = adjMatrix.length;
     	for (T vertex: vertexList) 
     	{
-    		if (vertex.equals(vertLabel)) {
-    		System.out.println("match");
+    		if (vertex.equals(vertLabel)) 
     		return;
-    		}
     	}
     	
     	if (n == matrixLength) 
@@ -108,7 +106,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         T edge = (T) "1";
         int row = vertexList.indexOf(vertLabel);
         T[] colArray;
-        int col = row;
+        int col = 0;
         while (col < adjMatrix.length) 
         {
         	colArray = (T[]) adjMatrix[row][col];
@@ -116,7 +114,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         		neighbours.add(colArray[1]);
         	col++;
         }
-        
+        System.out.println("neighbours = " + neighbours);
         return neighbours;
         
     } // end of neighbours()
@@ -124,6 +122,12 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     @SuppressWarnings("unchecked")
 	public void removeVertex(T vertLabel) {
+    	
+    	if (!(vertexList.contains(vertLabel))) {
+    			System.err.println("Vertex does not exist");
+    		    return; 
+    	}
+    	
     	int matrixLength = adjMatrix.length;
     	int index = vertexList.indexOf(vertLabel);
     	vertexList.remove(vertLabel);
@@ -212,23 +216,100 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 
     	    }System.out.println(" ");
     	
+    	}
     	
-    	    //os.print(vertexList);
+    	try {
+    		for (T v: vertexList) {
+    	    	os.print(v + " "); 
+    	    	}
+    	} finally {
+    		if (os != null) {
+    			os.close();
+    		}
     	}
     
     } // end of printVertices()
 	
     
-    public void printEdges(PrintWriter os) {
-        // Implement me!
+    @SuppressWarnings("unchecked")
+	public void printEdges(PrintWriter os) {
+    	T[] edge = null;
+    	try {
+    		for (int i = 0; i < adjMatrix.length; i++)
+    		{
+    			for (int j = 0; j < adjMatrix[i].length; j++) 
+    			{
+    				edge = (T[]) adjMatrix[i][j];
+    				if (edge[2].equals("1"))
+    				os.println(edge[0] + " " + edge[1]);
+    			}
+    		}		
+        	
+    	} finally {
+    		if (os != null) {
+    			os.close();
+    		}
+    	}
+
     } // end of printEdges()
     
     
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
-    	// Implement me!
+    	int[] pair = new int[2];
+    	int count = 0;
+    	
+        String l = null;
+        int test = 0;
+    	boolean[] marked = new boolean[vertexList.size()];
+       	for (int i = 0; i < marked.length; i++)
+    		marked[i] = false;
+    	
+		Queue<int[]> q = new ArrayDeque<int[]>(); 
+		int sourceVert = vertexList.indexOf(vertLabel1);
+		int targetVert = vertexList.indexOf(vertLabel2);
+		System.out.println("index of sourceVert = " + sourceVert);
+		System.out.println("index of targetVert = " + targetVert);
+
+		
+    	marked[sourceVert] = true;
+    	pair[0] = sourceVert; 
+    	pair[1] = count;
+    	q.add(pair);
+    	
+    	while(!q.isEmpty()) 
+    	{
+    		int[] p = q.remove();
+    		int vert = p[0];
+    		int dist = p[1];
+    		
+    		if(vert == targetVert)   //if index of sourceVert == index of targetVert return the distance
+    			return dist;
+    		
+    		
+    		List<T> getNeighbours = neighbours(vertexList.get(vert));
+    		for (T w: getNeighbours) 
+    		{
+    				l = w.toString(); 
+    				test = vertexList.indexOf(l);
+
+    		
+    			if (!marked[test])
+					{
+						marked[test] = true;
+						int[] newPair = new int[2];
+						newPair[0] = test;
+						newPair[1] = dist+1;
+						q.add(newPair);
+					}
+    		}System.out.println("test =" + test);
+    		
+    	}
     	
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
     } // end of shortestPathDistance()
+
+
+	
     
 } // end of class AdjMatrix
