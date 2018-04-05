@@ -28,7 +28,7 @@ public void setVertex2(T vertex2) {
 	
 public String toString() {
 	
-	return String.format("%s/%s", vertex1, vertex2);
+	return String.format("%s-%s", vertex1, vertex2);
 	}
 
 }

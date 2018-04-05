@@ -18,7 +18,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	@SuppressWarnings("unchecked")
 	T edge = (T) "0";
 	private T[] newArray;
-	
+	 int count;
 	
     @SuppressWarnings("unchecked")
 	public AdjMatrix() {
@@ -180,7 +180,8 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     } // end of removeVertex()
 	
     
-    public void removeEdge(T srcLabel, T tarLabel) {
+    @SuppressWarnings("unchecked")
+	public void removeEdge(T srcLabel, T tarLabel) {
     	T[] edgeArray = (T[]) new Object[3];
     	T newEdge = (T) new Object();
     	newEdge = (T) "1";
@@ -209,48 +210,45 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	
     
     public void printVertices(PrintWriter os) {
-    	
-    	for (int i = 0; i < adjMatrix.length; i++) {
+    	//printing to console
+    /*	for (int i = 0; i < adjMatrix.length; i++) {
     	    for (int j = 0; j < adjMatrix[i].length; j++) {
     	    	System.out.print(Arrays.deepToString((Object[]) adjMatrix[i][j]));    	
 
     	    }System.out.println(" ");
     	
-    	}
+    	}*/
+
+    			for (T v: vertexList) 
+    			{
+    				os.print(v + " ");
+    			}
+    			os.println(" ");
+    			
+    		os.flush();
+    		
     	
-    	try {
-    		for (T v: vertexList) {
-    	    	os.print(v + " "); 
-    	    	}
-    	} finally {
-    		if (os != null) {
-    			os.close();
-    		}
-    	}
     
     } // end of printVertices()
 	
     
     @SuppressWarnings("unchecked")
 	public void printEdges(PrintWriter os) {
-    	T[] edge = null;
-    	try {
+    	T[] edge;
+    	
     		for (int i = 0; i < adjMatrix.length; i++)
     		{
     			for (int j = 0; j < adjMatrix[i].length; j++) 
     			{
     				edge = (T[]) adjMatrix[i][j];
     				if (edge[2].equals("1"))
+    					//System.out.println();
     				os.println(edge[0] + " " + edge[1]);
+    				
     			}
     		}		
-        	
-    	} finally {
-    		if (os != null) {
-    			os.close();
-    		}
-    	}
-
+        	os.flush();
+    	
     } // end of printEdges()
     
     
@@ -267,9 +265,6 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 		Queue<int[]> q = new ArrayDeque<int[]>(); 
 		int sourceVert = vertexList.indexOf(vertLabel1);
 		int targetVert = vertexList.indexOf(vertLabel2);
-		System.out.println("index of sourceVert = " + sourceVert);
-		System.out.println("index of targetVert = " + targetVert);
-
 		
     	marked[sourceVert] = true;
     	pair[0] = sourceVert; 
@@ -301,7 +296,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 						newPair[1] = dist+1;
 						q.add(newPair);
 					}
-    		}System.out.println("test =" + test);
+    		}
     		
     	}
     	

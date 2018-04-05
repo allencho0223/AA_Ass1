@@ -14,12 +14,16 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 	private T[][] indMatrix;
 	List<T> vertexList = new ArrayList<T>();
 	List<T> edgeList = new ArrayList<T>();
+	@SuppressWarnings("rawtypes")
 	List<Edge> edgeCollection = new ArrayList<Edge>();
 	private T[] matrixArray;
+	@SuppressWarnings("rawtypes")
 	Edge edge;
+	@SuppressWarnings("unchecked")
 	T e = (T) "0";
 
-    public IndMatrix() {
+    @SuppressWarnings("unchecked")
+	public IndMatrix() {
     	indMatrix = (T[][])new Object[12][15];
 
     } // end of IndMatrix()
@@ -40,7 +44,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     		T vertex1 = edgeList.get(i);
     		int next = ++i;
     		T vertex2 = edgeList.get(next);
-    		edge = new Edge(vertex1, vertex2);
+    		edge = new Edge<T>(vertex1, vertex2);
 
     	}
     	edgeCollection.add(edge); 
