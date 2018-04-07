@@ -16,7 +16,6 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	@SuppressWarnings("rawtypes")
 	private List<Edge> edgeCollection = new ArrayList<Edge>();
 	int numV = 0;
-	int numE = 0;
 	
 	
     public AdjMatrix() {
@@ -45,11 +44,18 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	
     	Edge edge = new Edge(srcLabel, tarLabel);
    
+    	edgeErrorCheck(srcLabel, tarLabel);
+
     	// check that no duplicate edges come through
-   
+    	for (Edge e: edgeCollection) {				
+    		if (e.getVertex1().equals(srcLabel) && e.getVertex2().equals(tarLabel) 
+    				|| e.getVertex1().equals(tarLabel) && e.getVertex2().equals(srcLabel)){ 
+    			System.err.println("Edge Already Exists!");
+    			return;
+    		}
+    	}
+    	
     	edgeCollection.add(edge);
-    	numE++;  
-    	System.out.println("numE = " + numE);
     	createMatrix();
     	
     	
@@ -94,11 +100,9 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     		
     	}
     	edgeCollection = newEdgeList;
-    	
     	numV--; 
-    	numE = edgeCollection.size();
-    	
     	createMatrix();
+    	
     } // end of removeVertex()
 	
     
@@ -107,12 +111,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	
     	List <Edge> newEdgeList = new ArrayList<Edge>();
     	
-    	if (!(vertexCollection.contains(srcLabel)) 
-    			|| !(vertexCollection.contains(tarLabel)))
-		{
-			System.err.println("Error Message");
-			return;
-		}
+    	edgeErrorCheck(srcLabel, tarLabel);
 
     	for (Edge e: edgeCollection) {
     		if (!(e.getVertex1().equals(srcLabel) && e.getVertex2().equals(tarLabel)) 
@@ -123,24 +122,39 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	}
 
     		edgeCollection = newEdgeList;
-    		numE = edgeCollection.size();
     		createMatrix();
+    		
     } // end of removeEdges()
 	
     
     public void printVertices(PrintWriter os) {
-    	for (int i = 0; i < adjMatrix.length; i++) {
-    	    for (int j = 0; j < adjMatrix[i].length; j++) {
-    	    	System.out.print(adjMatrix[i][j] + " ");    	
-
-    	    }System.out.println("");
     	
-    	}
+		for (T v: vertexCollection) 
+		{
+			os.print(v + " ");
+		}
+		os.println(" ");
+		
+		os.flush();
+		
     } // end of printVertices()
 	
     
     public void printEdges(PrintWriter os) {
-        // Implement me!
+		for (int row = 0; row < adjMatrix.length; row++) 
+		{
+			for (int col = 0; col < adjMatrix[row].length; col++) 
+			{
+				if (adjMatrix[row][col] == 1) 
+				{
+					os.print(vertexCollection.get(row));
+					os.println(" " + vertexCollection.get(col));
+				}
+			}
+		}
+    	os.flush();
+    	
+    	
     } // end of printEdges()
     
     
@@ -149,7 +163,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	int count = 0;
     	
         String l = null;
-        int test = 0;
+        int neigh = 0;
     	boolean[] marked = new boolean[vertexCollection.size()];
        	for (int i = 0; i < marked.length; i++)
     		marked[i] = false;
@@ -177,14 +191,13 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     		for (T w: getNeighbours) 
     		{
     				l = w.toString(); 
-    				test = vertexCollection.indexOf(l);
+    				neigh = vertexCollection.indexOf(l);
 
-    		
-    			if (!marked[test])
+    			if (!marked[neigh])
 					{
-						marked[test] = true;
+						marked[neigh] = true;
 						int[] newPair = new int[2];
-						newPair[0] = test;
+						newPair[0] = neigh;
 						newPair[1] = dist+1;
 						q.add(newPair);
 					}
@@ -225,6 +238,19 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
        	
 
    }// end of class createMatrix
+    
+    
+    public void edgeErrorCheck(T srcLabel, T tarLabel) 
+    {
+
+    	if (!(vertexCollection.contains(srcLabel)) 
+    			|| !(vertexCollection.contains(tarLabel))
+    				|| srcLabel.equals(tarLabel))
+		{
+			System.err.println("Vertex not found or invalid edge.");
+			return;
+		}
+    }
     
     
 } // end of class AdjMatrix

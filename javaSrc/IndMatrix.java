@@ -34,7 +34,6 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     
     	vertexCollection.add(vertLabel);
     	numV++;
-    	System.out.println("numV = " + numV);
     	createMatrix();
     	
     } // end of addVertex()
@@ -45,20 +44,19 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     	
     	Edge edge = new Edge(srcLabel, tarLabel);
     	
-    	if (!(vertexCollection.contains(srcLabel)) 
-    			|| !(vertexCollection.contains(tarLabel)))
-		{
-			System.err.println("Error Message");
-			return;
-		}
-    	
-   
+    	edgeErrorCheck(srcLabel, tarLabel);
+
     	// check that no duplicate edges come through
-    	
+    	for (Edge e: edgeCollection) {				
+    		if (e.getVertex1().equals(srcLabel) && e.getVertex2().equals(tarLabel) 
+    				|| e.getVertex1().equals(tarLabel) && e.getVertex2().equals(srcLabel)){ 
+    			System.err.println("Edge Already Exists!");
+    			return;
+    		}
+    	}
     	
     	edgeCollection.add(edge);
     	numE++;  
-    	System.out.println("numE = " + numE);
     	createMatrix();
   	
     } // end of addEdge()
@@ -94,7 +92,6 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     	 	
     	vertexCollection.remove(vertLabel);
 
-    	
     	for (Edge e: edgeCollection) {
     		if (!(e.getVertex1().equals(vertLabel)) && !(e.getVertex2().equals(vertLabel))){ 
     			newEdgeList.add(e);
@@ -118,14 +115,10 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     	
     	List <Edge> newEdgeList = new ArrayList<Edge>();
     	
-    	if (!(vertexCollection.contains(srcLabel)) 
-    			|| !(vertexCollection.contains(tarLabel)))
-		{
-			System.err.println("Error Message");
-			return;
-		}
+    	edgeErrorCheck(srcLabel, tarLabel);
 
-    	for (Edge e: edgeCollection) {
+    	for (Edge e: edgeCollection) 
+    	{
     		if (!(e.getVertex1().equals(srcLabel) && e.getVertex2().equals(tarLabel)) 
     				&& !(e.getVertex2().equals(srcLabel) && e.getVertex1().equals(tarLabel))) {
     				newEdgeList.add(e);
@@ -142,18 +135,30 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 	
     
     public void printVertices(PrintWriter os) {
-    	for (int i = 0; i < indMatrix.length; i++) {
-    	    for (int j = 0; j < indMatrix[i].length; j++) {
-    	    	System.out.print(indMatrix[i][j] + " ");    	
-
-    	    }System.out.println("");
     	
-    	}
+    	for (T v: vertexCollection) 
+		{
+			os.print(v + " ");
+		}
+		os.println(" ");
+		
+		os.flush();
+		
     } // end of printVertices()
 	
     
-    public void printEdges(PrintWriter os) {
-        // Implement me!
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public void printEdges(PrintWriter os) {
+       
+    	for (Edge e: edgeCollection) 
+    	{
+    		T v1 = (T) e.getVertex1();
+    		T v2 = (T) e.getVertex2();
+    		
+    		os.printf("%s %s\n%s %s\n", v1, v2, v2, v1);
+    	}
+    	os.flush();
+    	
     } // end of printEdges()
     
     
@@ -162,7 +167,7 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     	int count = 0;
     	
         String l = null;
-        int test = 0;
+        int neigh = 0;
     	boolean[] marked = new boolean[vertexCollection.size()];
        	for (int i = 0; i < marked.length; i++)
     		marked[i] = false;
@@ -190,14 +195,14 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
     		for (T w: getNeighbours) 
     		{
     				l = w.toString(); 
-    				test = vertexCollection.indexOf(l);
+    				neigh = vertexCollection.indexOf(l);
 
     		
-    			if (!marked[test])
+    			if (!marked[neigh])
 					{
-						marked[test] = true;
+						marked[neigh] = true;
 						int[] newPair = new int[2];
-						newPair[0] = test;
+						newPair[0] = neigh;
 						newPair[1] = dist+1;
 						q.add(newPair);
 					}
@@ -230,8 +235,20 @@ public class IndMatrix <T extends Object> implements FriendshipGraph<T>
 
     		}
     	}    	
-    	
-    	
+
+    }
+    
+    
+    public void edgeErrorCheck(T srcLabel, T tarLabel) 
+    {
+
+    	if (!(vertexCollection.contains(srcLabel)) 
+    			|| !(vertexCollection.contains(tarLabel))
+    				|| srcLabel.equals(tarLabel))
+		{
+			System.err.println("Vertex not found or invalid edge.");
+			return;
+		}
     }
     
     
