@@ -10,7 +10,7 @@ public class DataGenerator {
     
     // constructor
     public DataGenerator() {
-        dataSet = receiveData();
+        dataSet = retrieveData();
         randGenerator = new Random(System.currentTimeMillis());
     }
 
@@ -19,21 +19,44 @@ public class DataGenerator {
         DataGenerator DG = new DataGenerator();
         long startTime, endTime;
         double estimatedTime;
+        String[] genData = null;
         
         startTime = System.nanoTime();
         
         for (int i = 0; i < DG.dataSet.length; i++) {
             System.out.println(DG.dataSet[i]);
         }
-//        System.out.println(DG.dataSet.length);
+        
         endTime = System.nanoTime();
         
         estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
         
         System.out.println("\ntime taken: " + estimatedTime + "sec");
+        
+        genData = DG.addVertex(100);
+        
+        for (int i = 0; i < genData.length; i++) {
+            System.out.println("Testing: " + genData[i]);
+        }
+        
     }   // end of main
     
-    public String[] receiveData() {
+    public String[] addVertex(int dataSize) {
+        
+        String[] vertices = new String[dataSize];
+        int dataSetRandom = 0;
+        System.out.println("test: " + randGenerator.nextInt(endRange));
+//        for(int i = 0; i < dataSize; i++)
+//        {
+//            // need to avoid assigning the same number into vertices array
+//            dataSetRandom = randGenerator.nextInt(endRange);
+//            vertices[i] = dataSet[dataSetRandom];
+//        }
+        
+        return vertices;
+    }   // end of adjAddVertex
+    
+    public String[] retrieveData() {
         
         String[] data = null;
         int lineNum = 0;
@@ -48,16 +71,26 @@ public class DataGenerator {
                 
                 lineNum++;
             }
-            if (BR != null) {
-                BR.close();
-            }
         } catch (IOException ioe) {
             System.err.println(ioe.getLocalizedMessage());
         }
         
         endRange = lineNum - 1;
         return data;
-    }
+    }   // end of retrieveData
+    
+    
+    
+//    public String[] adjAddEdge(int dataSize) {
+//        
+//        String[] edges = new String[dataSize];
+//        int dataSetRandom = 0;
+//        
+//        
+//        return;
+//    }
+    
+    
     
     
 }   // end of class
