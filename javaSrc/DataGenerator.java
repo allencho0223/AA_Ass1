@@ -65,8 +65,11 @@ public class DataGenerator {
                     }
                 }
                 count++;
-                BW.write("AV " + vertList.get(vertNum) + "\n");
-                vertBW.write(vertList.get(vertNum) + " ");
+            }
+            
+            for (String vertex : vertList) {
+                BW.write("AV " + vertex + "\n");
+                vertBW.write(vertex + " ");
             }
             
 //            // bubble sort algorithm applied to sort ascending order
@@ -82,12 +85,13 @@ public class DataGenerator {
 //            }
             
             
-            
             // Store addEdge commands into a text file
             count = 0;
             for (int edgeNum = 0; edgeNum < 20; edgeNum++) {
                 srcVert = vertList.get(randCommGenerator.nextInt(vertList.size()));
                 tarVert = vertList.get(randCommGenerator.nextInt(vertList.size()));
+                System.out.println("srcVert: " + srcVert);
+                System.out.println("tarVert: " + tarVert);
                 tempString = srcVert + " " + tarVert;
                 edgeList.add(tempString);
                 
@@ -101,16 +105,11 @@ public class DataGenerator {
                     }
                 }
                 count++;
-                BW.append("AE " + edgeList.get(edgeNum) + "\n");
-                edgeBW.append(edgeList.get(edgeNum) + "\n");
             }
             
-            for (int i = edgeList.size() - 1; i >= 0; i--) {
-                edgeBW.append(edgeList.get(i) + "\n");
+            for (String edge : edgeList) {
+                BW.append("AE " + edge + "\n");
             }
-//            for (String edge : edgeList) {
-//                
-//            }
             
             
             // Store neighbour commands into text file
