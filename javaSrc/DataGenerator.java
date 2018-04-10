@@ -38,9 +38,9 @@ public class DataGenerator {
         int maxDataNum = 50;
         try {
             // Generate a number of integer vertexes
-            for (int vertNum = 0; vertNum < 5; vertNum++) {
+            for (int vertNum = 0; vertNum < maxDataNum; vertNum++) {
                 
-                tempString = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                tempString = Integer.toString(randCommGenerator.nextInt(maxDataNum) + 1);
                 vertList.add(tempString); 
                 
                 // if the same number has been created, do not store them
@@ -79,8 +79,8 @@ public class DataGenerator {
             // Store addEdge commands into a text file
             count = 0;
             for (int edgeNum = 0; edgeNum < 20; edgeNum++) {
-                srcVert = Integer.toString(randCommGenerator.nextInt(5) + 1);
-                tarVert = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                srcVert = vertList.get(randCommGenerator.nextInt(vertList.size()));
+                tarVert = vertList.get(randCommGenerator.nextInt(vertList.size()));
                 tempString = srcVert + " " + tarVert;
                 edgeList.add(tempString);
                 
@@ -104,13 +104,12 @@ public class DataGenerator {
             // Store neighbour commands into text file
             count = 0;
             for (int neighNum = 0; neighNum < 10; neighNum++) {
-                tempString = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                tempString = vertList.get(randCommGenerator.nextInt(vertList.size()));
                 neighbourList.add(tempString);
                 
                 if (count > 0) {
                     for (int check = 0; check < neighbourList.size() - 1; check++) {
                         if (Integer.parseInt(tempString) == Integer.parseInt(neighbourList.get(check))) {
-                            System.out.println("same");
                             neighbourList.remove(check);
                         }
                     }
@@ -126,9 +125,9 @@ public class DataGenerator {
             // Store shortest path commands into a text file
             count = 0;
             for (int pathNum = 0; pathNum < 10; pathNum++) {
-                srcVert = Integer.toString(randCommGenerator.nextInt(5) + 1);
-                tarVert = Integer.toString(randCommGenerator.nextInt(5) + 1);
-                tempString = "S " + srcVert + " " + tarVert + "\n";
+                srcVert = vertList.get(randCommGenerator.nextInt(vertList.size()));
+                tarVert = vertList.get(randCommGenerator.nextInt(vertList.size()));
+                tempString = srcVert + " " + tarVert;
                 pathList.add(tempString);
                 
                 if (count >0) {
@@ -142,13 +141,13 @@ public class DataGenerator {
             }
             
             for (String path : pathList) {
-                BW.append(path);
+                BW.append("S " + path + "\n");
             }
             
             // Store remove vertex commands into a text file
             count = 0;
             for (int vertNum = 0; vertNum < 10; vertNum++) {
-                tempString = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                tempString = vertList.get(randCommGenerator.nextInt(vertList.size()));
                 rmvVertList.add(tempString);
                 if (count > 0) {
                     for (int check = 0; check < rmvVertList.size() - 1; check++) {
@@ -164,15 +163,13 @@ public class DataGenerator {
                 BW.append("RV " + vertex + "\n");
             }
             
+            
             // Store remove edge commands into a text file
             count = 0;
             for (int edgeNum = 0; edgeNum < 10; edgeNum++) {
+                tempString = edgeList.get(randCommGenerator.nextInt(edgeList.size()));
                 
-                srcVert = Integer.toString(randCommGenerator.nextInt(vertList.size()));
-                tarVert = Integer.toString(randCommGenerator.nextInt(vertList.size()));
-                tempString = srcVert + " " + tarVert;
                 while (edgeExistence == false) {
-                    System.out.println(edgeExistence);
                     for (int i = 0; i < edgeList.size(); i++) {
                         if (tempString.compareTo(edgeList.get(i)) == 0) {
                             rmvEdgeList.add(tempString);
@@ -181,7 +178,6 @@ public class DataGenerator {
                         }
                     }
                 }
-                
                 
                 // If there is already a set of edge existing in the current arraylist, do not store them
                 if (count > 0) {
@@ -193,10 +189,11 @@ public class DataGenerator {
                     }
                 }
                 count++;
+                edgeExistence = false;
             }
             
             for (String edge : rmvEdgeList) {
-                BW.append(edge);
+                BW.append("RE " + edge + "\n");
             }
             
                 // Store display vertex command into a text file
