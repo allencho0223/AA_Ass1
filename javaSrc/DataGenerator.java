@@ -3,11 +3,11 @@ import java.util.*;
 
 public class DataGenerator {
     
-    private static final String fileName = "command_generator.in";
-    private static final String vertOutput = "command_generator.vert.exp";
-    private static final String edgeOutput = "command_generator.edge.exp";
-    private static final String distOutput = "command_generator.dist.exp";
-    private static final String neighbourOutput = "command_generator.neigh.exp";
+    private static final String fileName = "command_generator.txt";
+//    private static final String vertOutput = "command_generator.vert.exp";
+//    private static final String edgeOutput = "command_generator.edge.exp";
+//    private static final String distOutput = "command_generator.dist.exp";
+//    private static final String neighbourOutput = "command_generator.neigh.exp";
     private static List<String> vertList = new ArrayList<String>();
     private static List<String> edgeList = new ArrayList<String>();
     private static List<String> neighbourList = new ArrayList<String>();
@@ -33,7 +33,8 @@ public class DataGenerator {
     
     private static void commandGenerator() {
         
-        BufferedWriter BW, vertBW, edgeBW, distBW, neighbourBW = null;
+        BufferedWriter BW = null;
+        BufferedWriter vertBW, edgeBW, distBW, neighbourBW = null;
         Random randCommGenerator = new Random();
         String tempString = " ";
         String srcVert = " ";
@@ -43,11 +44,10 @@ public class DataGenerator {
         try {
             
             BW = new BufferedWriter(new FileWriter(fileName));
-            vertBW = new BufferedWriter(new FileWriter(vertOutput));
-            edgeBW = new BufferedWriter(new FileWriter(edgeOutput));
-            distBW = new BufferedWriter(new FileWriter(distOutput));
-            neighbourBW = new BufferedWriter(new FileWriter(neighbourOutput));
-            
+//            vertBW = new BufferedWriter(new FileWriter(vertOutput));
+//            edgeBW = new BufferedWriter(new FileWriter(edgeOutput));
+//            distBW = new BufferedWriter(new FileWriter(distOutput));
+//            neighbourBW = new BufferedWriter(new FileWriter(neighbourOutput));
             
             // Generate a number of integer vertexes
             for (int vertNum = 0; vertNum < maxDataNum; vertNum++) {
@@ -69,7 +69,7 @@ public class DataGenerator {
             
             for (String vertex : vertList) {
                 BW.write("AV " + vertex + "\n");
-                vertBW.write(vertex + " ");
+//                vertBW.write(vertex + " ");
             }
             
 //            // bubble sort algorithm applied to sort ascending order
@@ -90,8 +90,6 @@ public class DataGenerator {
             for (int edgeNum = 0; edgeNum < 20; edgeNum++) {
                 srcVert = vertList.get(randCommGenerator.nextInt(vertList.size()));
                 tarVert = vertList.get(randCommGenerator.nextInt(vertList.size()));
-                System.out.println("srcVert: " + srcVert);
-                System.out.println("tarVert: " + tarVert);
                 tempString = srcVert + " " + tarVert;
                 edgeList.add(tempString);
                 
@@ -126,7 +124,7 @@ public class DataGenerator {
                     }
                 }
                 count++;
-                neighbourBW.append(tempString);
+//                neighbourBW.append(tempString);
             }
             
             for (String neighbour : neighbourList) {
@@ -221,22 +219,22 @@ public class DataGenerator {
                 BW.flush();
                 BW.close();
             }
-            if (vertBW != null) {
-                vertBW.flush();
-                vertBW.close();
-            }
-            if (edgeBW != null) {
-                edgeBW.flush();
-                edgeBW.close();
-            }
-            if (distBW != null) {
-                distBW.flush();
-                distBW.close();
-            }
-            if (neighbourBW != null) {
-                neighbourBW.flush();
-                neighbourBW.close();
-            }
+//            if (vertBW != null) {
+//                vertBW.flush();
+//                vertBW.close();
+//            }
+//            if (edgeBW != null) {
+//                edgeBW.flush();
+//                edgeBW.close();
+//            }
+//            if (distBW != null) {
+//                distBW.flush();
+//                distBW.close();
+//            }
+//            if (neighbourBW != null) {
+//                neighbourBW.flush();
+//                neighbourBW.close();
+//            }
             System.out.print("Dataset has been successfully generated");
         } catch (IOException e) {
             System.err.println(e.getLocalizedMessage());
