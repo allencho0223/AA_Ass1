@@ -6,7 +6,11 @@ public class DataGenerator {
     private static final String fileName = "command_generator.in";
     private static List<String> vertList = new ArrayList<String>();
     private static List<String> edgeList = new ArrayList<String>();
-    private static boolean edgeConnected = false;
+    private static List<String> neighbourList = new ArrayList<String>();
+    private static List<String> pathList = new ArrayList<String>();
+    private static List<String> rmvVertList = new ArrayList<String>();
+    private static List<String> rmvEdgeList = new ArrayList<String>();
+    private static boolean edgeExistence = false;
     String command = " ";
 //    protected static final String progName = "DataGenerator";
 //    protected String[] dataSet = null;
@@ -28,12 +32,15 @@ public class DataGenerator {
         BufferedWriter BW = null;
         Random randCommGenerator = new Random();
         String tempString = " ";
+        String srcVert = " ";
+        String tarVert = " ";
         int count = 0;
+        int maxDataNum = 50;
         try {
             // Generate a number of integer vertexes
-            for (int vertNum = 0; vertNum < 100; vertNum++) {
+            for (int vertNum = 0; vertNum < 5; vertNum++) {
                 
-                tempString = Integer.toString(randCommGenerator.nextInt(100));
+                tempString = Integer.toString(randCommGenerator.nextInt(5) + 1);
                 vertList.add(tempString); 
                 
                 // if the same number has been created, do not store them
@@ -48,17 +55,17 @@ public class DataGenerator {
                 count++;
             }
             
-            // bubble sort algorithm applied
-            for (int i = 0; i < vertList.size(); i++) {
-                for (int j = 0; j < vertList.size() - 1; j++) {
-                    // check if we need to swap
-                    if (Integer.parseInt(vertList.get(j)) > Integer.parseInt(vertList.get(j + 1)) ) {
-                        String temp = vertList.get(j);
-                        vertList.set(j, vertList.get(j + 1));
-                        vertList.set(j + 1, temp);
-                    }
-                }
-            }
+//            // bubble sort algorithm applied to sort ascending order
+//            for (int i = 0; i < vertList.size(); i++) {
+//                for (int j = 0; j < vertList.size() - 1; j++) {
+//                    // check if we need to swap
+//                    if (Integer.parseInt(vertList.get(j)) > Integer.parseInt(vertList.get(j + 1))) {
+//                        String temp = vertList.get(j);
+//                        vertList.set(j, vertList.get(j + 1));
+//                        vertList.set(j + 1, temp);
+//                    }
+//                }
+//            }
             
             BW = new BufferedWriter(new FileWriter(fileName));
             
@@ -67,39 +74,139 @@ public class DataGenerator {
                 BW.write("AV " + vertex + "\n");
             }
             
+            
+            
             // Store addEdge commands into a text file
-//          BW.append("AE 1 2\n");
-//          BW.append("AE 1 3\n");
-//          BW.append("AE 2 3\n");
-//          BW.append("AE 3 4\n");
-//          BW.append("AE 3 6\n");
-//          BW.append("AE 2 8\n");
+            count = 0;
+            for (int edgeNum = 0; edgeNum < 20; edgeNum++) {
+                srcVert = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                tarVert = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                tempString = srcVert + " " + tarVert;
+                edgeList.add(tempString);
+                
+                // If there is already a set of edge existing in the current arraylist, do not store them
+                if (count > 0) {
+                    for (int check = 0; check < edgeList.size() - 1; check++) {
+                        if (tempString.compareTo(edgeList.get(check)) == 0) {
+                            edgeList.remove(check);
+                            // If you want to generate the edges based on the number of array size, edgeNum--;
+                        }
+                    }
+                }
+                count++;
+            }
+            
+            for (String edge : edgeList) {
+                BW.append("AE " + edge + "\n");
+            }
+            
             
             // Store neighbour commands into text file
-//          BW.append("N 1\n");
-//          BW.append("N 3\n");
-//          BW.append("N 7\n");
+            count = 0;
+            for (int neighNum = 0; neighNum < 10; neighNum++) {
+                tempString = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                neighbourList.add(tempString);
+                
+                if (count > 0) {
+                    for (int check = 0; check < neighbourList.size() - 1; check++) {
+                        if (Integer.parseInt(tempString) == Integer.parseInt(neighbourList.get(check))) {
+                            System.out.println("same");
+                            neighbourList.remove(check);
+                        }
+                    }
+                }
+                count++;
+            }
+            
+            for (String neighbour : neighbourList) {
+                BW.append("N " + neighbour + "\n");
+            }
+            
             
             // Store shortest path commands into a text file
-//          BW.append("S 1 6\n");
-//          BW.append("S 4 6\n");
-//          BW.append("S 2 7\n");
+            count = 0;
+            for (int pathNum = 0; pathNum < 10; pathNum++) {
+                srcVert = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                tarVert = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                tempString = "S " + srcVert + " " + tarVert + "\n";
+                pathList.add(tempString);
+                
+                if (count >0) {
+                    for (int check = 0; check < pathList.size() - 1; check++) {
+                        if (tempString.compareTo(pathList.get(check)) == 0) {
+                            pathList.remove(check);
+                        }
+                    }
+                }
+                count++;
+            }
+            
+            for (String path : pathList) {
+                BW.append(path);
+            }
             
             // Store remove vertex commands into a text file
-//          BW.append("RV 3\n");
+            count = 0;
+            for (int vertNum = 0; vertNum < 10; vertNum++) {
+                tempString = Integer.toString(randCommGenerator.nextInt(5) + 1);
+                rmvVertList.add(tempString);
+                if (count > 0) {
+                    for (int check = 0; check < rmvVertList.size() - 1; check++) {
+                        if (tempString.compareTo(rmvVertList.get(check)) == 0) {
+                            rmvVertList.remove(check);
+                        }
+                    }
+                }
+                count++;
+            }
+            
+            for (String vertex : rmvVertList) {
+                BW.append("RV " + vertex + "\n");
+            }
             
             // Store remove edge commands into a text file
-//          BW.append("RE 3 4\n");
+            count = 0;
+            for (int edgeNum = 0; edgeNum < 10; edgeNum++) {
+                
+                srcVert = Integer.toString(randCommGenerator.nextInt(vertList.size()));
+                tarVert = Integer.toString(randCommGenerator.nextInt(vertList.size()));
+                tempString = srcVert + " " + tarVert;
+                while (edgeExistence == false) {
+                    System.out.println(edgeExistence);
+                    for (int i = 0; i < edgeList.size(); i++) {
+                        if (tempString.compareTo(edgeList.get(i)) == 0) {
+                            rmvEdgeList.add(tempString);
+                            edgeExistence = true;
+                            break;
+                        }
+                    }
+                }
+                
+                
+                // If there is already a set of edge existing in the current arraylist, do not store them
+                if (count > 0) {
+                    for (int check = 0; check < rmvEdgeList.size() - 1; check++) {
+                        if (tempString.compareTo(rmvEdgeList.get(check)) == 0) {
+                            rmvEdgeList.remove(check);
+                            // If you want to generate the edges based on the number of array size, edgeNum--;
+                        }
+                    }
+                }
+                count++;
+            }
             
-            // Store display vertex command into a text file
-//          BW.append("V\n");
+            for (String edge : rmvEdgeList) {
+                BW.append(edge);
+            }
             
-            // Store display edge command into a text file
-//          BW.append("E\n");
-            
-            // Store quit command into a text file
-//          BW.append("Q\n");
-            
+                // Store display vertex command into a text file
+            BW.append("V\n");
+                
+                // Store display edge command into a text file
+            BW.append("E\n");
+                
+                // Store quit command into a text file
+            BW.append("Q\n");
             
             if (BW != null) {
                 BW.flush();
