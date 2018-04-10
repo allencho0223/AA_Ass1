@@ -209,7 +209,7 @@ public class DataGenerator {
                 BW.flush();
                 BW.close();
             }
-            
+            System.out.print("Dataset has been successfully generated");
         } catch (IOException e) {
             System.err.println(e.getLocalizedMessage());
         }
@@ -217,19 +217,23 @@ public class DataGenerator {
 
     public static void main(String[] args) {
         
+        long startTime, endTime;
+        double estimatedTime;
         
+        startTime = System.nanoTime();
         commandGenerator();
+        endTime = System.nanoTime();
+        estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
         
-        
+        System.out.println("\ntime taken: " + estimatedTime + "sec");
         
         
         
 //        DataGenerator DG = new DataGenerator();
-//        long startTime, endTime;
-//        double estimatedTime;
+
 //        String[] genData = null;
 //        
-//        startTime = System.nanoTime();
+        
 //        
 //        for (int i = 0; i < DG.dataSet.length; i++) {
 //            System.out.println(DG.dataSet[i]);
@@ -237,11 +241,9 @@ public class DataGenerator {
 //        
 //        DG.dataIntoAdjMatrix();
 //        
-//        endTime = System.nanoTime();
+        
 //        
-//        estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
-//        
-//        System.out.println("\ntime taken: " + estimatedTime + "sec");
+
 //        
 //        genData = DG.addVertex(100);
 //        
