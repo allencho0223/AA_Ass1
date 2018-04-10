@@ -4,6 +4,10 @@ import java.util.*;
 public class DataGenerator {
     
     private static final String fileName = "command_generator.in";
+    private static final String vertOutput = "command_generator.vert.exp";
+    private static final String edgeOutput = "command_generator.edge.exp";
+    private static final String distOutput = "command_generator.dist.exp";
+    private static final String neighbourOutput = "command_generator.neigh.exp";
     private static List<String> vertList = new ArrayList<String>();
     private static List<String> edgeList = new ArrayList<String>();
     private static List<String> neighbourList = new ArrayList<String>();
@@ -29,7 +33,7 @@ public class DataGenerator {
     
     private static void commandGenerator() {
         
-        BufferedWriter BW = null;
+        BufferedWriter BW, vertBW, edgeBW, distBW, neighbourBW = null;
         Random randCommGenerator = new Random();
         String tempString = " ";
         String srcVert = " ";
@@ -37,6 +41,14 @@ public class DataGenerator {
         int count = 0;
         int maxDataNum = 50;
         try {
+            
+            BW = new BufferedWriter(new FileWriter(fileName));
+            vertBW = new BufferedWriter(new FileWriter(vertOutput));
+            edgeBW = new BufferedWriter(new FileWriter(edgeOutput));
+            distBW = new BufferedWriter(new FileWriter(distOutput));
+            neighbourBW = new BufferedWriter(new FileWriter(neighbourOutput));
+            
+            
             // Generate a number of integer vertexes
             for (int vertNum = 0; vertNum < maxDataNum; vertNum++) {
                 
@@ -53,6 +65,8 @@ public class DataGenerator {
                     }
                 }
                 count++;
+                BW.write("AV " + vertList.get(vertNum) + "\n");
+                vertBW.write(vertList.get(vertNum) + " ");
             }
             
 //            // bubble sort algorithm applied to sort ascending order
@@ -66,13 +80,6 @@ public class DataGenerator {
 //                    }
 //                }
 //            }
-            
-            BW = new BufferedWriter(new FileWriter(fileName));
-            
-            // Store addVertex commands into a text file
-            for (String vertex : vertList) {
-                BW.write("AV " + vertex + "\n");
-            }
             
             
             
@@ -94,11 +101,16 @@ public class DataGenerator {
                     }
                 }
                 count++;
+                BW.append("AE " + edgeList.get(edgeNum) + "\n");
+                edgeBW.append(edgeList.get(edgeNum) + "\n");
             }
             
-            for (String edge : edgeList) {
-                BW.append("AE " + edge + "\n");
+            for (int i = edgeList.size() - 1; i >= 0; i--) {
+                edgeBW.append(edgeList.get(i) + "\n");
             }
+//            for (String edge : edgeList) {
+//                
+//            }
             
             
             // Store neighbour commands into text file
@@ -115,6 +127,7 @@ public class DataGenerator {
                     }
                 }
                 count++;
+                neighbourBW.append(tempString);
             }
             
             for (String neighbour : neighbourList) {
@@ -208,6 +221,22 @@ public class DataGenerator {
             if (BW != null) {
                 BW.flush();
                 BW.close();
+            }
+            if (vertBW != null) {
+                vertBW.flush();
+                vertBW.close();
+            }
+            if (edgeBW != null) {
+                edgeBW.flush();
+                edgeBW.close();
+            }
+            if (distBW != null) {
+                distBW.flush();
+                distBW.close();
+            }
+            if (neighbourBW != null) {
+                neighbourBW.flush();
+                neighbourBW.close();
             }
             System.out.print("Dataset has been successfully generated");
         } catch (IOException e) {
