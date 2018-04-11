@@ -5,6 +5,7 @@ public class DataGenerator {
     
     private List<String> vertList = new ArrayList<String>();
     private List<String> edgeList = new ArrayList<String>();
+    private List<String> subEdgeList = new ArrayList<String>();
     private int fbVertNum = 0;
     private int fbEdgeNum = 0;
     
@@ -70,9 +71,39 @@ public class DataGenerator {
             if (!vertList.contains(rightVertex)) {
                 vertList.add(rightVertex);
             }
+            
+            subEdgeList.add(leftVertex + " " + rightVertex);
             line++;
 //            System.out.println("prev: " + leftVertex);
 //            System.out.println("crnt: " + rightVertex);
+        }
+        
+     // bubble sort algorithm applied to sort ascending order
+        for (int i = 0; i < vertList.size(); i++) {
+            for (int j = 0; j < vertList.size() - 1; j++) {
+                // check if we need to swap
+                if (Integer.parseInt(vertList.get(j)) > Integer.parseInt(vertList.get(j + 1))) {
+                    String temp = vertList.get(j);
+                    vertList.set(j, vertList.get(j + 1));
+                    vertList.set(j + 1, temp);
+                }
+            }
+        }
+        
+        System.out.println("vertList size: " + vertList.size());
+        System.out.println("subEdgeList size: " + subEdgeList.size());
+//        for (int i = 0; i < subEdgeList.size(); i++) {
+//            System.out.println("subEdgeList: " + subEdgeList.get(i));
+//        }
+        
+        try {
+            BW = new BufferedWriter(new FileWriter("subedgelist.txt"));
+            for (String subEdge : subEdgeList) {
+                BW.write(subEdge + "\n");
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         // Assign the size of vertices and edges into those variables
@@ -87,22 +118,12 @@ public class DataGenerator {
         medDensity = density * 0.66;
         highDensity = density * 0.99;
         
-        // bubble sort algorithm applied to sort ascending order
-        for (int i = 0; i < vertList.size(); i++) {
-            for (int j = 0; j < vertList.size() - 1; j++) {
-                // check if we need to swap
-                if (Integer.parseInt(vertList.get(j)) > Integer.parseInt(vertList.get(j + 1))) {
-                    String temp = vertList.get(j);
-                    vertList.set(j, vertList.get(j + 1));
-                    vertList.set(j + 1, temp);
-                }
-            }
-        }
+        
         
         // Prints out all the vertices stored in vertList array          
-        for (int i = 0; i < vertList.size(); i++) {
-            System.out.println("vertList: " + vertList.get(i));
-        }
+//        for (int i = 0; i < vertList.size(); i++) {
+//            System.out.println("vertList: " + vertList.get(i));
+//        }
         
         // Write edges and vertices into text file, but only for testing purpose
 //        try {
