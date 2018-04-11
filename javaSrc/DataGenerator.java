@@ -17,6 +17,7 @@ public class DataGenerator {
     public void retrieveData() {
     
         BufferedWriter BW = null;
+        Random r = new Random();
         BufferedReader BR = null;
         String fileName = "facebook_combined.txt";
         
@@ -59,6 +60,7 @@ public class DataGenerator {
          *  
          */
 
+        // Not sure if we just have to assign 500 vertexes, or even other vertexes connected with those 500 vertexes.
         while (leftVertex.compareTo("500") != 0) {
             st = new StringTokenizer(edgeList.get(line), " ");
             leftVertex = st.nextToken();
@@ -90,33 +92,67 @@ public class DataGenerator {
             }
         }
         
-        System.out.println("vertList size: " + vertList.size());
-        System.out.println("subEdgeList size: " + subEdgeList.size());
+        // vert: 1820, edge: 7847
+//        System.out.println("vertList size: " + vertList.size());
+//        System.out.println("subEdgeList size: " + subEdgeList.size());
 //        for (int i = 0; i < subEdgeList.size(); i++) {
 //            System.out.println("subEdgeList: " + subEdgeList.get(i));
 //        }
-        
-        try {
-            BW = new BufferedWriter(new FileWriter("subedgelist.txt"));
-            for (String subEdge : subEdgeList) {
-                BW.write(subEdge + "\n");
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
         // Assign the size of vertices and edges into those variables
         fbVertNum = vertList.size();
         fbEdgeNum = edgeList.size();
         
         // Density formula
-        density = fbEdgeNum / (fbVertNum  * fbVertNum);
-        
+        density =  (double) fbEdgeNum / (double) (fbVertNum  * fbVertNum);
+        System.out.println("density: " + density);
         // Low density (these are just bs now lol)
-        lowDensity = density * 0.33;
-        medDensity = density * 0.66;
-        highDensity = density * 0.99;
+        lowDensity = density * 0.3;
+        System.out.println("low Density: " + lowDensity);
+        medDensity = density * 0.6;
+        System.out.println("med Density: " + medDensity);
+        highDensity = density * 0.9;
+        System.out.println("high Density: " + highDensity);
+        
+        // low density
+        /**
+         * for 5522 (magic number), initial edge num is 7847, and so the density is 0.027
+         * low density is 0.008; hence the formula i used is : 
+         * 0.027 : 0.008 = 7847 : x -> 0.027x = 0.008 * 7847
+         * mid for 0.027 : 0.016 = 7847 : x
+         * high for 0.027 : 0.024 = 7847 : x
+         *  
+         */
+        
+        try {
+            BW = new BufferedWriter(new FileWriter("facebook_low_remove.txt"));
+            for (int i = 0; i < 5522; i++) {
+                BW.write("RE " + subEdgeList.get(r.nextInt(subEdgeList.size())) + "\n");
+            }
+            if (BW != null) {
+                BW.close();
+            }
+            
+            // med density
+            BW = new BufferedWriter(new FileWriter("facebook_med_remove.txt"));
+            for (int i = 0 ; i < 3197; i++) {
+                BW.write("RE " + subEdgeList.get(r.nextInt(subEdgeList.size())) + "\n");
+            }
+            if (BW != null) {
+                BW.close();
+            }
+            
+            // high density
+            BW = new BufferedWriter(new FileWriter("facebook_high_remove.txt"));
+            for (int i = 0 ; i < 872; i++) {
+                BW.write("RE " + subEdgeList.get(r.nextInt(subEdgeList.size())) + "\n");
+            }
+            if (BW != null) {
+                BW.close();
+            }
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        }
         
         
         
@@ -135,8 +171,11 @@ public class DataGenerator {
 //            for (String vertex : vertList) {
 //                BW.write(vertex + "\n");
 //            }
+//            BW = new BufferedWriter(new FileWriter("subedgelist.txt"));
+//            for (String subEdge : subEdgeList) {
+//                BW.write(subEdge + "\n");
+//            }
 //        } catch (IOException e) {
-//            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
     }   // end of retrieveData method
