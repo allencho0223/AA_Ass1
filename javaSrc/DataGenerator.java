@@ -295,7 +295,6 @@ public class DataGenerator {
     
     public void removeVertexAndEdge() {
         
-        
         List<String> rmvVertList = new ArrayList<String>();
         List<String> rmvEdgeList = new ArrayList<String>();
         BufferedWriter BW = null;
@@ -346,12 +345,17 @@ public class DataGenerator {
         DataGenerator dataGenerator = new DataGenerator();
         long startTime, endTime;
         double estimatedTime;
+        
         startTime = System.nanoTime();
+        
+        // Data Generation process
         dataGenerator.retrieveData();
         dataGenerator.addVertexAndEdge();
         dataGenerator.addNeighbourAndShortestPath();
         dataGenerator.removeVertexAndEdge();
+        
         endTime = System.nanoTime();
+        
         estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
         
         System.out.println("\ntime taken: " + estimatedTime + "sec");
