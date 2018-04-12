@@ -3,11 +3,14 @@
 
 public class DataGenerator {
     
+    Random r = new Random();
     private List<String> vertList = new ArrayList<String>();
     private List<String> edgeList = new ArrayList<String>();
     private List<String> subEdgeList = new ArrayList<String>();
     private int fbVertNum = 0;
     private int fbEdgeNum = 0;
+    
+    private final int reqCommandNum = 50;
     
     
     public DataGenerator() {
@@ -80,7 +83,8 @@ public class DataGenerator {
 //            System.out.println("crnt: " + rightVertex);
         }
         
-     // bubble sort algorithm applied to sort ascending order
+        // bubble sort algorithm applied to sort vertices in ascending order 
+        // note: not required for the assignment itself but only for the testing purpose
         for (int i = 0; i < vertList.size(); i++) {
             for (int j = 0; j < vertList.size() - 1; j++) {
                 // check if we need to swap
@@ -121,7 +125,7 @@ public class DataGenerator {
          * 0.027 : 0.008 = 7847 : x -> 0.027x = 0.008 * 7847
          * mid for 0.027 : 0.016 = 7847 : x
          * high for 0.027 : 0.024 = 7847 : x
-         *  
+         * eventually, we might have to think of the formula (not magic number) for better testing results
          */
         
         try {
@@ -180,7 +184,163 @@ public class DataGenerator {
 //        }
     }   // end of retrieveData method
     
-
+    public void addVertexAndEdge() {
+        
+        BufferedWriter BW = null;
+        String newVert = " ";
+        String newSrcEdge = " ";
+        String newTarEdge = " ";
+        String edgeSet = " ";
+        
+        int maxNum = 5000;
+        List<String> newVertList = new ArrayList<String>();
+        List<String> newEdgeList = new ArrayList<String>();
+        
+        try {
+            BW = new BufferedWriter(new FileWriter("add_vert_and_edge.txt"));
+            
+            for (int i = 0; i < reqCommandNum; i++) {
+                newVert = Integer.toString(r.nextInt(maxNum) + 1);
+                if (!vertList.get(i).contains(newVert)) {
+                    newVertList.add(newVert);
+                }
+            }
+            
+            for (String vertex : newVertList) {
+                BW.write("AV " + vertex + "\n");
+            }
+            
+            /**
+             *  Not sure for this part because we are generating new vertices
+             *  e.g. we're generating random numbers from 0 ~ 5000 (but don't worry 
+             *  because it will check the same number existing in current array and not store them
+             *  so technically it would be from 500 ~ 5000). My question is whether we have to make
+             *  new edges from current vertices (as new vertices are not created yet)
+             */
+            for (int i = 0; i < reqCommandNum; i++) {
+                newSrcEdge = vertList.get(r.nextInt(vertList.size()));
+                newTarEdge = vertList.get(r.nextInt(vertList.size()));
+                edgeSet = newSrcEdge + " " + newTarEdge;
+                if (!subEdgeList.get(i).contains(edgeSet)) {
+                    newEdgeList.add(edgeSet);
+                }
+            }
+            
+            for (String edge : newEdgeList) {
+                BW.append("AE " + edge + "\n");
+            }
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        } finally {
+            try {
+                if (BW != null) {
+                    BW.close();
+                }
+            } catch (IOException e) {
+                System.err.println(e.getLocalizedMessage());
+            }
+        }
+    }
+    
+    public void addNeighbourAndShortestPath() {
+        
+        List<String> neighbourList = new ArrayList<String>();
+        List<String> sPathList = new ArrayList<String>();
+        BufferedWriter BW = null;
+        String neighbour = " ";
+        String srcSPath = " ";
+        String tarSPath = " ";
+        String sPathSet = " "; 
+        int reqCommandNum = 50;
+                
+        
+        try {
+            BW = new BufferedWriter(new FileWriter("add_neigh_and_spath.txt"));
+            for (int i = 0; i < reqCommandNum; i++) {
+                neighbour = vertList.get(r.nextInt(vertList.size()));
+                if (!neighbourList.contains(neighbour)) {
+                    neighbourList.add(neighbour);
+                }
+            }
+            
+            for (String neigh : neighbourList) {
+                BW.write("N " + neigh + "\n");
+            }
+            
+            for (int i = 0; i < reqCommandNum; i++) {
+                srcSPath = vertList.get(r.nextInt(vertList.size()));
+                tarSPath = vertList.get(r.nextInt(vertList.size()));
+                sPathSet = srcSPath + " " + tarSPath;
+                if (!sPathList.contains(sPathSet)) {
+                    sPathList.add(sPathSet);
+                }
+            }
+            
+            for (String path : sPathList) {
+                BW.append("S " + path + "\n");
+            }
+            
+        } catch (IOException e) {
+            System.out.println(e.getLocalizedMessage());
+        } finally {
+            if (BW != null) {
+                try {
+                    BW.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    
+    public void removeVertexAndEdge() {
+        
+        
+        List<String> rmvVertList = new ArrayList<String>();
+        List<String> rmvEdgeList = new ArrayList<String>();
+        BufferedWriter BW = null;
+        String rmvVertex = " ";
+        String rmvEdge = " ";
+        
+        try {
+            BW = new BufferedWriter(new FileWriter("rmv_vert_and_edge.txt"));
+            
+            for (int i = 0; i < reqCommandNum; i++) {
+                rmvVertex = vertList.get(r.nextInt(vertList.size()));
+                if (vertList.contains(rmvVertex)) {
+                    rmvVertList.add(rmvVertex);
+                }
+            }
+            
+            for (String vert : rmvVertList) {
+                BW.write("RV " + vert + "\n");
+            }
+            
+            for (int i = 0; i < reqCommandNum; i++) {
+                rmvEdge = subEdgeList.get(r.nextInt(subEdgeList.size()));
+                if (!subEdgeList.contains(rmvVertex)) {
+                    System.out.println("check");
+                    rmvEdgeList.add(rmvEdge);
+                }
+            }
+            
+            for (String edge : rmvEdgeList) {
+                BW.append("RE " + edge + "\n");
+            }
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        
+        } finally {
+            
+            try {
+                if (BW != null) {
+                    BW.close();
+                }
+            } catch (IOException e) {
+                System.err.println(e.getLocalizedMessage());
+            }
+        }
+    }
 
     public static void main(String[] args) {
         DataGenerator dataGenerator = new DataGenerator();
@@ -188,6 +348,9 @@ public class DataGenerator {
         double estimatedTime;
         startTime = System.nanoTime();
         dataGenerator.retrieveData();
+        dataGenerator.addVertexAndEdge();
+        dataGenerator.addNeighbourAndShortestPath();
+        dataGenerator.removeVertexAndEdge();
         endTime = System.nanoTime();
         estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
         
