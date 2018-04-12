@@ -76,7 +76,6 @@ public class DataGenerator {
             if (!vertList.contains(rightVertex)) {
                 vertList.add(rightVertex);
             }
-            
             subEdgeList.add(leftVertex + " " + rightVertex);
             subEdgeList.add(rightVertex + " " + leftVertex);
             line++;
@@ -355,25 +354,30 @@ public class DataGenerator {
         long startTime, endTime;
         double estimatedTime;
         String scenario;
-        
+        boolean termination = false;
         startTime = System.nanoTime();
         try {
-            scenario = inReader.readLine();
-            
-            dataGenerator.retrieveData();
-            
-            switch (scenario) {
-                case "1":
-                    dataGenerator.addVertexAndEdge();
-                    break;
-                case "2":
-                    dataGenerator.addNeighbourAndShortestPath();
-                    break;
-                case "3":
-                    dataGenerator.removeVertexAndEdge();
-                    break;
+            System.out.println("Interative mode");
+            // Added while loop for the testing purpose. Will eventually be removed.
+            while (!termination) {
+                scenario = inReader.readLine();
+                
+                dataGenerator.retrieveData();
+                
+                switch (scenario) {
+                    case "1":
+                        dataGenerator.addVertexAndEdge();
+                        break;
+                    case "2":
+                        dataGenerator.addNeighbourAndShortestPath();
+                        break;
+                    case "3":
+                        dataGenerator.removeVertexAndEdge();
+                        break;
+                    case "Q":
+                        termination = true;
+                } 
             }
-            
             endTime = System.nanoTime();
             
             estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
