@@ -78,6 +78,7 @@ public class DataGenerator {
             }
             
             subEdgeList.add(leftVertex + " " + rightVertex);
+            subEdgeList.add(rightVertex + " " + leftVertex);
             line++;
 //            System.out.println("prev: " + leftVertex);
 //            System.out.println("crnt: " + rightVertex);
@@ -96,7 +97,7 @@ public class DataGenerator {
             }
         }
         
-        // vert: 1820, edge: 7847
+        // vert: 1820, edge: 15694
 //        System.out.println("vertList size: " + vertList.size());
 //        System.out.println("subEdgeList size: " + subEdgeList.size());
 //        for (int i = 0; i < subEdgeList.size(); i++) {
@@ -105,7 +106,9 @@ public class DataGenerator {
 
         // Assign the size of vertices and edges into those variables
         fbVertNum = vertList.size();
-        fbEdgeNum = edgeList.size();
+        
+        // As the graph is undirected, the number of edges should be doubled.
+        fbEdgeNum = subEdgeList.size();
         
         // Density formula
         density =  (double) fbEdgeNum / (double) (fbVertNum  * fbVertNum);
@@ -122,15 +125,16 @@ public class DataGenerator {
         /**
          * for 5522 (magic number), initial edge num is 7847, and so the density is 0.027
          * low density is 0.008; hence the formula i used is : 
-         * 0.027 : 0.008 = 7847 : x -> 0.027x = 0.008 * 7847
-         * mid for 0.027 : 0.016 = 7847 : x
-         * high for 0.027 : 0.024 = 7847 : x
+         * 0.005 : 0.001 = 15694 : x -> 3139, 15694 - 3139 = 12555
+         * mid for 0.005 : 0.003 = 15694 : x -> 9416, 15694 - 9416 = 6278
+         * high for 0.005 : 0.004 = 15694 : x -> 12555, 15694 - 12555 = 3139
          * eventually, we might have to think of the formula (not magic number) for better testing results
          */
         
         try {
+            // low density
             BW = new BufferedWriter(new FileWriter("facebook_low_remove.txt"));
-            for (int i = 0; i < 5522; i++) {
+            for (int i = 0; i < 12555; i++) {
                 BW.write("RE " + subEdgeList.get(r.nextInt(subEdgeList.size())) + "\n");
             }
             if (BW != null) {
@@ -139,7 +143,7 @@ public class DataGenerator {
             
             // med density
             BW = new BufferedWriter(new FileWriter("facebook_med_remove.txt"));
-            for (int i = 0 ; i < 3197; i++) {
+            for (int i = 0 ; i < 6278; i++) {
                 BW.write("RE " + subEdgeList.get(r.nextInt(subEdgeList.size())) + "\n");
             }
             if (BW != null) {
@@ -148,7 +152,7 @@ public class DataGenerator {
             
             // high density
             BW = new BufferedWriter(new FileWriter("facebook_high_remove.txt"));
-            for (int i = 0 ; i < 872; i++) {
+            for (int i = 0 ; i < 3139; i++) {
                 BW.write("RE " + subEdgeList.get(r.nextInt(subEdgeList.size())) + "\n");
             }
             if (BW != null) {
@@ -158,14 +162,7 @@ public class DataGenerator {
             System.err.println(e.getLocalizedMessage());
         }
         
-        
-        
-        // Prints out all the vertices stored in vertList array          
-//        for (int i = 0; i < vertList.size(); i++) {
-//            System.out.println("vertList: " + vertList.get(i));
-//        }
-        
-        // Write edges and vertices into text file, but only for testing purpose
+        // Write edges and vertices into text file, but only for the testing purpose
 //        try {
 //            BW = new BufferedWriter(new FileWriter("edgeTest.txt"));
 //            for (String edge : edgeList) {
@@ -223,6 +220,7 @@ public class DataGenerator {
                 edgeSet = newSrcEdge + " " + newTarEdge;
                 if (!subEdgeList.get(i).contains(edgeSet)) {
                     newEdgeList.add(edgeSet);
+                    newEdgeList.add(newTarEdge + " " + newSrcEdge); 
                 }
             }
             
@@ -300,8 +298,12 @@ public class DataGenerator {
         BufferedWriter BW = null;
         String rmvVertex = " ";
         String rmvEdge = " ";
+//        StringTokenizer st;
+//        String rightVertex = " ";
+//        String leftVertex = " ";
         
         try {
+            // Remove vertices
             BW = new BufferedWriter(new FileWriter("rmv_vert_and_edge.txt"));
             
             for (int i = 0; i < reqCommandNum; i++) {
@@ -315,11 +317,16 @@ public class DataGenerator {
                 BW.write("RV " + vert + "\n");
             }
             
-            for (int i = 0; i < reqCommandNum; i++) {
+            // Remove Edges
+            for (int i = 0; i < 25; i++) {
                 rmvEdge = subEdgeList.get(r.nextInt(subEdgeList.size()));
+                
                 if (!subEdgeList.contains(rmvVertex)) {
-                    System.out.println("check");
                     rmvEdgeList.add(rmvEdge);
+//                    st = new StringTokenizer(rmvEdge, " ");
+//                    leftVertex = st.nextToken();
+//                    rightVertex = st.nextToken();
+//                    rmvEdgeList.add(rightVertex + " " + leftVertex);
                 }
             }
             
@@ -342,23 +349,42 @@ public class DataGenerator {
     }
 
     public static void main(String[] args) {
+        
+        BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
         DataGenerator dataGenerator = new DataGenerator();
         long startTime, endTime;
         double estimatedTime;
+        String scenario;
         
         startTime = System.nanoTime();
+        try {
+            scenario = inReader.readLine();
+            
+            dataGenerator.retrieveData();
+            
+            switch (scenario) {
+                case "1":
+                    dataGenerator.addVertexAndEdge();
+                    break;
+                case "2":
+                    dataGenerator.addNeighbourAndShortestPath();
+                    break;
+                case "3":
+                    dataGenerator.removeVertexAndEdge();
+                    break;
+            }
+            
+            endTime = System.nanoTime();
+            
+            estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
+            
+            System.out.println("\ntime taken: " + estimatedTime + "sec");
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        }
         
-        // Data Generation process
-        dataGenerator.retrieveData();
-        dataGenerator.addVertexAndEdge();
-        dataGenerator.addNeighbourAndShortestPath();
-        dataGenerator.removeVertexAndEdge();
         
-        endTime = System.nanoTime();
         
-        estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
-        
-        System.out.println("\ntime taken: " + estimatedTime + "sec");
         
 
     }   // end of main method

@@ -158,6 +158,10 @@ public class GraphTester
 	 * Main method.  Determines which implementation to test and processes command line arguments.
 	 */
 	public static void main(String[] args) {
+	    
+	    long startTime, endTime;
+        double estimatedTime;
+        startTime = System.nanoTime();
 
 		// parse command line options
 		OptionParser parser = new OptionParser("f:");
@@ -284,6 +288,13 @@ public class GraphTester
                         
 			// process the operations
 			processOperations(inReader, graph, verticesOutWriter, edgesOutWriter, neighbourOutWriter, distanceOutWriter);
+			
+			endTime = System.nanoTime();
+	        
+	        estimatedTime = ((double) (endTime - startTime)) / Math.pow(10, 9);
+	        
+	        System.out.println("\ntime taken: " + estimatedTime + "sec");
+			
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
