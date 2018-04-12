@@ -38,6 +38,7 @@ public class DataGenerator {
           System.err.println(ioe.getLocalizedMessage());
         }
         
+        
         // Tokenise edges into separate (individual) vertex and assign them into vertList array
         StringTokenizer st;
         String rightVertex = " ";
@@ -63,14 +64,17 @@ public class DataGenerator {
          *  I have to now implement getting the actual edges based on our subset data. Need to think about it.
          *  
          */
+        
+        
 
         // Not sure if we just have to assign 500 vertexes, or even other vertexes connected with those 500 vertexes.
         while (leftVertex.compareTo("500") != 0) {
             st = new StringTokenizer(edgeList.get(line), " ");
-            leftVertex = st.nextToken();
             
-            if (!vertList.contains(rightVertex)) {
+            leftVertex = st.nextToken();
+            if (!vertList.contains(leftVertex)) {
                 vertList.add(leftVertex);
+                
             }
             
             rightVertex = st.nextToken();
@@ -239,6 +243,8 @@ public class DataGenerator {
             }
         }
     }
+    
+//    AdjMatrix<String> absd
     
     public void addNeighbourAndShortestPath() {
         
