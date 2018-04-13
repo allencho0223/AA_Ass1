@@ -19,15 +19,17 @@ public class DGV2 {
 	static List<String> vertexList = new ArrayList<String>();
 	static List<Edge> edgeList = new ArrayList<Edge>();
 
-    public static void createDensityFile(String inputFile, String outputFile, double density) throws IOException {
+    
+	
+	
+	public static void createDensityFile(String inputFile, String outputFile, double density) throws IOException {
 
     	BufferedReader br = null;
     	
     	FileWriter fileStream = new FileWriter(outputFile);
 		BufferedWriter bw = new BufferedWriter(fileStream);
 		
-		int count = 0;
-    	try {
+		try {
     		br = new BufferedReader(new FileReader(inputFile));
 		
 	    	String line;
@@ -57,8 +59,6 @@ public class DGV2 {
 		
     
     	adjustDensity(density, calculateCurrentDensity());
-
-    	System.out.println("did we make it?"); 
     	
 		for (Edge e1: edgeList) {
 	    	 bw.write(e1.getVertex1() + " ");
@@ -76,43 +76,36 @@ public class DGV2 {
     	Edge edge = null;
     	if (currentDensity <= targetDensity) 
     	{
-    		double density = currentDensity;
-    		while (density != targetDensity) 
-    		{	
-	    		
+    			double density = currentDensity;
 	    		for (int i = 0; i < vertexList.size(); i++) 
 	    		{
 	    			int count = 0;
 	    			while (count < vertexList.size()) 
 	    			{
-	    			edge =  new Edge(vertexList.get(i), vertexList.get(count));
+	    				edge = new Edge(vertexList.get(i), vertexList.get(count));
+	    				if (!edgeExists(edge.getVertex1(), edge.getVertex2()))
+	    						edgeList.add(edge);
 	    			
-	    			if (!edgeExists(edge.getVertex1(), edge.getVertex2()))
-    					edgeList.add(edge);
-	    			
-	    			density = calculateCurrentDensity();
-	    			count++;
+	    				density = calculateCurrentDensity();
+	    				if (density == targetDensity)
+	    						break;
+	    				
+	    				count++;
 	    			}
 	    			
-	    			
 	    		}
-
-    		}
     	}
+    	
    
     }
     
     
     public static double calculateCurrentDensity() 
     {	
-    	double truncDouble;
-    	double currentDensity;
-    	double numOfPossibleEdges;
+    	double truncDouble, currentDensity, numOfPossibleEdges;
     	
     	int v = vertexList.size();
     	int e = edgeList.size();
-    	
-    	System.out.println("v = " + v + "  e = " + e);
     	
     	numOfPossibleEdges = v * (v - 1);
     	currentDensity = e / numOfPossibleEdges;
@@ -139,20 +132,14 @@ public class DGV2 {
 		return newVertex;
 	}
 	
-	public static String arrayIterator()
-	{
-		ListIterator<String> it = vertexList.listIterator();
-		String newVertex = it.hasNext()?it.next():null;
-		return newVertex;
-	}
-	
-  
+
     public static boolean edgeExists(String v1, String v2) 
     {
-    	for (Edge e: edgeList) {				
-    		if (e.getVertex1().equals(v1) && e.getVertex2().equals(v2) 
-    				|| e.getVertex1().equals(v2) && e.getVertex2().equals(v1)){ 
-    			System.err.println("Edge Already Exists!");
+    	for (Edge e: edgeList) 
+    	{				
+    		if (e.getVertex1().equals(v1) && e.getVertex2().equals(v2) /*|| e.getVertex1().equals(v2) && e.getVertex2().equals(v1)*/)
+    		{ 
+    			//System.err.println("Edge Exists!");
     			return true;
     		}
     	}
@@ -160,28 +147,6 @@ public class DGV2 {
     }
     
 	
-	public static void main(String[] args) throws IOException {
-      
-		File f = new File("facebook_density.txt");
-    	if (f.exists()) {
-    		System.out.println("file exists");
-    	   f.delete();
-    	}
-    	
-    	File f2 = new File("commandsList.txt");
-    	if (f2.exists()) {
-    		System.out.println("file exists");
-    	   f2.delete();
-    	}
-    	
-		createDensityFile("facebook_combined.txt", "facebook_density.txt", 0.9);  
-		
-	//	createCommandsFile("scenario1.txt", 1);
-	//	createCommandsFile("scenario2.txt", 2);
-	//	createCommandsFile("scenario3.txt", 3);
-	//	
-		
-    }   // end of main method
 	
 	
 	 public static void createCommandsFile(String outputFile , int command) throws IOException 
@@ -193,12 +158,12 @@ public class DGV2 {
 	    		
 	    		switch (command) 
 	    		{
-	    		case 1: growFriendshipGraphCommands(bw);
-	    			break;
-	    		case 2: requestNSPDCommands(bw);
-	    			break;
-	    		case 3: shrinkFriendshipGraphCommands(bw); 
-	    			break;
+		    		case 1: growFriendshipGraphCommands(bw);
+		    			break;
+		    		case 2: requestNSPDCommands(bw);
+		    			break;
+		    		case 3: shrinkFriendshipGraphCommands(bw); 
+		    			break;
 	    		}
 	    		
 			
@@ -225,7 +190,7 @@ public class DGV2 {
 		while (countV < 100) {
 			vertex = randomNumberGenerator(600);
 			if (!vertexList.contains(vertex)) {
-				
+				vertexList.add(vertex);
 				bw.write(addVertex + " " + vertex);
 				bw.newLine();
 				countV++;
@@ -233,9 +198,10 @@ public class DGV2 {
 		}
 		
 		while (countE < 100) {
-			edge = new Edge(randomNumberGenerator(300), randomNumberGenerator(300));
-    		if (!edgeExists(edge.getVertex1(), edge.getVertex2()) && vertexList.contains(edge.getVertex1())) {
+			edge = new Edge(arrayRandom(), arrayRandom());
+    		if (!edgeExists(edge.getVertex1(), edge.getVertex2())) {
     			bw.write(addEdge + " " + edge.getVertex1() + " " + edge.getVertex2());
+    			edgeList.add(edge);
     			bw.newLine();
     			countE++;
     		}
@@ -247,29 +213,28 @@ public class DGV2 {
 	public static void requestNSPDCommands(BufferedWriter bw) throws IOException 
 	{
 		System.out.println("NSPD");
-		//Function 2: In scenario 2, you would generate random “N x” and “S x y” 
-		//commands where vertices x and y both exist in the graph. 
 		
 		Edge edge = null;	
 		int countN = 0;
 		int countS = 0;
-		String vertex;
+		String vertexN, SV1, SV2;
 		String neighbours = "N";
 		String spd = "S";
 		
 		while (countN < 100) {
-			vertex = randomNumberGenerator(600);
-			if (vertexList.contains(vertex)) {
-				bw.write(neighbours + " " + vertex);
+			vertexN = arrayRandom();
+			if (vertexList.contains(vertexN)) {
+				bw.write(neighbours + " " + vertexN);
 				bw.newLine();
 				countN++;
 			} 
 		}
 		
 		while (countS < 100) {
-			edge = new Edge(randomNumberGenerator(500), randomNumberGenerator(50));
-    		if (edgeExists(edge.getVertex1(), edge.getVertex2())) {
-    			bw.write(spd + " " + edge.getVertex1() + " " + edge.getVertex2());
+			SV1 = arrayRandom();
+			SV2 = arrayRandom();
+    		if (vertexList.contains(SV1) && vertexList.contains(SV2)) {
+    			bw.write(spd + " " + SV1 + " " + SV2);
     			bw.newLine();
     			countS++;
     		}
@@ -281,12 +246,56 @@ public class DGV2 {
 
 	}
 	
-	public static void shrinkFriendshipGraphCommands(BufferedWriter bw) 
+	public static void shrinkFriendshipGraphCommands(BufferedWriter bw) throws IOException 
 	{
 		System.out.println("shrink");
-		//Function 3: In scenario 3, you would randomly generate “RE x y” and “RV z” 
-		//where x, y, z are vertices that exist in the graph and you know that there is an edge present between x and y. 
-
+		
+		Edge edge = null;	
+		int countV = 0;
+		int countE = 0;
+		String vertex;
+		String addVertex = "RV";
+		String addEdge = "RE";
+		
+		while (countV < 100) {
+			vertex = arrayRandom();
+			if (vertexList.contains(vertex)) {
+				vertexList.remove(vertex);
+				bw.write(addVertex + " " + vertex);
+				bw.newLine();
+				countV++;
+			} 
+		}
+		
+		while (countE < 100) {
+			edge = new Edge(arrayRandom(), arrayRandom());
+    		if (edgeExists(edge.getVertex1(), edge.getVertex2())) {
+    			bw.write(addEdge + " " + edge.getVertex1() + " " + edge.getVertex2());
+    			bw.newLine();
+    			countE++;
+    		}
+    	 
+		}
 	}
+	
+	
+	
+	public static void main(String[] args) throws IOException {
+	      
+		File f = new File("facebook_density.txt");
+    	if (f.exists()) {
+    		System.out.println("file exists");
+    	   f.delete();
+    	}
+    	
+		createDensityFile("facebook_combined.txt", "facebook_density.txt", 0.5);  
+		
+		createCommandsFile("scenario1.txt", 1);
+		createCommandsFile("scenario2.txt", 2);
+		createCommandsFile("scenario3.txt", 3);
+		
+		System.out.println("end of main method");
+    }   // end of main method
+	
 	
 }
