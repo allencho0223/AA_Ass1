@@ -147,18 +147,7 @@ public class DGV2 {
     }
     
 	
-    public static boolean edgeReverseExists(String v1, String v2) 
-    {
-    	for (Edge e: edgeList) 
-    	{				
-    		if (e.getVertex1().equals(v1) && e.getVertex2().equals(v2) || e.getVertex1().equals(v2) && e.getVertex2().equals(v1))
-    		{ 
-    			//System.err.println("Edge Exists!");
-    			return true;
-    		}
-    	}
-    	return false;
-    }
+	
 	
 	 public static void createCommandsFile(String outputFile , int command) throws IOException 
 	    {
@@ -201,7 +190,7 @@ public class DGV2 {
 		while (countV < 100) {
 			vertex = randomNumberGenerator(600);
 			if (!vertexList.contains(vertex)) {
-			
+				vertexList.add(vertex);
 				bw.write(addVertex + " " + vertex);
 				bw.newLine();
 				countV++;
@@ -210,9 +199,9 @@ public class DGV2 {
 		
 		while (countE < 100) {
 			edge = new Edge(arrayRandom(), arrayRandom());
-    		if (!edgeReverseExists(edge.getVertex1(), edge.getVertex2())) {
+    		if (!edgeExists(edge.getVertex1(), edge.getVertex2())) {
     			bw.write(addEdge + " " + edge.getVertex1() + " " + edge.getVertex2());
-    		
+    			edgeList.add(edge);
     			bw.newLine();
     			countE++;
     		}
@@ -271,6 +260,7 @@ public class DGV2 {
 		while (countV < 100) {
 			vertex = arrayRandom();
 			if (vertexList.contains(vertex)) {
+				vertexList.remove(vertex);
 				bw.write(addVertex + " " + vertex);
 				bw.newLine();
 				countV++;
@@ -279,7 +269,7 @@ public class DGV2 {
 		
 		while (countE < 100) {
 			edge = new Edge(arrayRandom(), arrayRandom());
-    		if (edgeReverseExists(edge.getVertex1(), edge.getVertex2())) {
+    		if (edgeExists(edge.getVertex1(), edge.getVertex2())) {
     			bw.write(addEdge + " " + edge.getVertex1() + " " + edge.getVertex2());
     			bw.newLine();
     			countE++;
